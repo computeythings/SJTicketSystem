@@ -62,7 +62,7 @@ module.exports = class Reports {
       if (err)
         console.error(err);
       else
-        console.log(`Row deleted ${this.changes}`);
+        console.log(this.changes);
     });
   }
 
