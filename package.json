@@ -1,0 +1,20 @@
+{
+  "name": "it-reporting",
+  "version": "1.0.0",
+  "description": "SQL DB for reporting and tracking IT requests",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^3.0.4",
+    "jsonwebtoken": "^8.4.0",
+    "source": "0.0.3",
+    "sqlite3": "^4.0.6"
+  },
+  "devDependencies": {
+    "mocha": "^5.2.0"
+  }
+}
