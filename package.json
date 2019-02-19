@@ -4,7 +4,7 @@
   "description": "SQL DB for reporting and tracking IT requests",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node ./node_modules/mocha/bin/mocha tests/*-test.js"
   },
   "author": "",
   "license": "ISC",

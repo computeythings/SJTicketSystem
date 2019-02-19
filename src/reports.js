@@ -31,10 +31,10 @@ module.exports = class Reports {
           $title: report.title,
           $description: report.description,
           $date: report.date
-        }, (err) => {
+        }, function(err) {
           if(err)
             reject(err);
-          resolve(this.changes);
+          resolve(this.lastID);
       });
     });
   }
@@ -46,7 +46,7 @@ module.exports = class Reports {
         'requestedBy = $requestedBy,' +
         'title = $title,' +
         'description = $description,' +
-        'date = $date' + , {
+        'date = $date', {
           $category: report.category,
           $requestedBy: report.requestedBy,
           $title: report.title,
@@ -55,7 +55,7 @@ module.exports = class Reports {
         }, (err) => {
           if(err)
             reject(err);
-          resolve(this.changes);
+          resolve(this.lastID);
         });
     });
   }
@@ -65,7 +65,7 @@ module.exports = class Reports {
       this.db.run('DELETE FROM reports WHERE rowid=?', id, (err) => {
         if (err)
           reject(err);
-        resolve(this.changes);
+        resolve(this.lastID);
       });
     });
   }
