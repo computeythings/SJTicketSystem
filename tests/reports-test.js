@@ -22,7 +22,7 @@ after(() => {
   reports.close();
 });
 
-describe('ReportsDB', () => {
+describe('reports.js', () => {
   describe('#addReport(report)', () => {
     it('should successfully add a test report', (done) => {
       reports.addReport(testReport).then((inserted) => {

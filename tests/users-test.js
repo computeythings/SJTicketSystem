@@ -17,7 +17,7 @@ after(() => {
   users.close();
 });
 
-describe('UsersDB', () => {
+describe('users.js', () => {
   describe('#addUser(user,pass)', () => {
     it('should successfully add a test user', (done) => {
       users.addUser(testUser, testPwd).then((result) => {

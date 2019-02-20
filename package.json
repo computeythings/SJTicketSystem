@@ -10,6 +10,8 @@
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^3.0.4",
+    "express": "^4.16.4",
+    "express-session": "^1.15.6",
     "jsonwebtoken": "^8.4.0",
     "source": "0.0.3",
     "sqlite3": "^4.0.6"
