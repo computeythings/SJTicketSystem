@@ -6,15 +6,16 @@ module.exports = class TokenGenerator {
         this.cert = cert;
         this.key = key;
     }
-    generate(uid) {
-        return jwt.sign({ uid: uid }, this.key, 
-        { 
-            algorithm: 'RS256', 
-            expiresIn: '7d' 
-        });
+    generate(user, expr) {
+      if(!expr) { expr = '1d'; }
+      return jwt.sign({ username: user }, this.key,
+      {
+          algorithm: 'RS256',
+          expiresIn: expr
+      });
     }
     // throws Invalid Signature if signature is bad
-    verify(token) {
-        return jwt.verify(token, this.cert);
+    verify(token, callback) {
+        return jwt.verify(token, this.cert, callback);
     }
 }
