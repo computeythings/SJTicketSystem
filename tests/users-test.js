@@ -31,7 +31,6 @@ describe('users.js', () => {
   describe('#getUser(user)', () => {
     it('should return the info of the user requested', done => {
       users.getUser(testUser).then(result => {
-        console.log(result);
         done();
       }).catch(err => {
         done(err);

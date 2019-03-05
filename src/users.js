@@ -59,8 +59,8 @@ module.exports = class Reports {
 
   getUser(user) {
     return new Promise((resolve, reject) => {
-      this.db.each('SELECT * FROM users WHERE user is ? LIMIT 1', user,
-      (err, row) => {
+      this.db.each('SELECT user, admin FROM users WHERE user is ? LIMIT 1',
+      user, (err, row) => {
         if (err) { reject(err); }
         resolve(row);
       });

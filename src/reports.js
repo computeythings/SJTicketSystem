@@ -21,6 +21,19 @@ module.exports = class Reports {
     });
   }
 
+  all() {
+    return new Promise((resolve, reject) => {
+      var reportsList = [];
+      this.db.each('SELECT * FROM reports', (err, row) => {
+        if (err) { reject(err); }
+        reportsList.push(row);
+      }, err => {
+        if (err) { reject(err); }
+        resolve(reportsList);
+      });
+    })
+  }
+
   addReport(report) {
     return new Promise((resolve, reject) => {
       this.db.run(
