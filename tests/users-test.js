@@ -28,9 +28,19 @@ describe('users.js', () => {
       });
     });
   });
+  describe('#getUser(user)', () => {
+    it('should return the info of the user requested', done => {
+      users.getUser(testUser).then(result => {
+        console.log(result);
+        done();
+      }).catch(err => {
+        done(err);
+      })
+    });
+  });
   describe('#login(user,pass)', () => {
-    it('should successfully login the test user', (done) => {
-      users.login(testUser, testPwd).then((result) => {
+    it('should successfully login the test user', done => {
+      users.login(testUser, testPwd).then(result => {
         if(result)
           done();
       }).catch(err => {
