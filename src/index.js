@@ -32,7 +32,7 @@ passport.use(new JWTStrategy({
   jwtFromRequest: req => req.cookies.jwt,
   secretOrKey: cert
 }, (jwtPayload, done) => {
-  jwt.verify(jwtPayload, cert, (err, decoded) => {
+  jwt.verifyAccessToken(jwtPayload, cert, (err, decoded) => {
     if (err) { return done(err.message); }
     return done(null, jwtPayload);
   });
