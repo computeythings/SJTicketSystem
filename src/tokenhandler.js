@@ -5,23 +5,16 @@ const fs = require('fs');
 const ISSUER =  'IT-Reports';
 const ACCESS_AUD = 'access';
 const REFRESH_AUD = 'refresh';
-
-var cert, key;
-if (process.env.NODE_ENV === 'production') {
-  cert = fs.readFileSync(process.env.SERVER_CERT);
-  key = fs.readFileSync(process.env.SERVER_KEY);
-} else {
-  cert = key = process.env.TEST_SECRET;
-}
+const keys = require('../lib/keys.js');
 
 // throws Invalid Signature if signature is bad
 module.verifyRefreshToken = (token, callback) => {
-  return jwt.verify(token, cert, { iss: ISSUER, aud: REFRESH_AUD }, callback);
+  return jwt.verify(token, keys.public, { iss: ISSUER, aud: REFRESH_AUD }, callback);
 }
 
 // throws Invalid Signature if signature is bad
 module.verifyAccessToken = (token, callback) => {
-    return jwt.verify(token, cert,
+    return jwt.verify(token, keys.public,
       { iss: ISSUER, aud: ACCESS_AUD }, callback);
 }
 
@@ -32,7 +25,7 @@ module.generateRefreshToken = (user, expr) => {
       sub: user,
       aud: REFRESH_AUD
     },
-    key,
+    keys.private,
     {
         algorithm: 'RS256',
         expiresIn: '30d'
@@ -52,7 +45,7 @@ module.generateAccessToken = (refreshToken, expr) => {
         sub: user,
         aud: ACCESS_AUD
       },
-      key,
+      keys.private,
       {
         algorithm: 'RS256',
         expiresIn: '1h'

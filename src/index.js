@@ -1,4 +1,3 @@
-require('dotenv').config();
 const fs = require('fs');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
@@ -6,14 +5,8 @@ const passportJWT = require('passport-jwt');
 const JWTStrategy = passportJWT.Strategy;
 const TokenHandler = require('./tokenhandler.js');
 const jwt = require('jsonwebtoken');
+const keys = require('../lib/keys.js');
 
-var cert, key;
-if (process.env.NODE_ENV === 'production') {
-  cert = fs.readFileSync(process.env.SERVER_CERT);
-  key = fs.readFileSync(process.env.SERVER_KEY);
-} else {
-  cert = key = process.env.TEST_SECRET;
-}
 
 passport.use(new LocalStrategy(
   async (username, password, done) => {
@@ -30,9 +23,9 @@ passport.use(new LocalStrategy(
 
 passport.use(new JWTStrategy({
   jwtFromRequest: req => req.cookies.jwt,
-  secretOrKey: cert
+  secretOrKey: keys.public
 }, (jwtPayload, done) => {
-  jwt.verify(jwtPayload, cert, (err, decoded) => {
+  jwt.verify(jwtPayload, keys.public, (err, decoded) => {
     if (err) { return done(err.message); }
     return done(null, jwtPayload);
   });
