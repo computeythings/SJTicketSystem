@@ -1,24 +1,26 @@
 "use strict"
 const jwt = require('jsonwebtoken');
 const fs = require('fs');
+const keys = require('../lib/keys.js');
 
 const ISSUER =  'IT-Reports';
 const ACCESS_AUD = 'access';
 const REFRESH_AUD = 'refresh';
-const keys = require('../lib/keys.js');
-
 // throws Invalid Signature if signature is bad
-module.verifyRefreshToken = (token, callback) => {
-  return jwt.verify(token, keys.public, { iss: ISSUER, aud: REFRESH_AUD }, callback);
+exports.verifyRefreshToken = (token, callback=undefined) => {
+  if (callback)
+    return jwt.verify(token, keys.public, { iss: ISSUER, aud: REFRESH_AUD }, callback);
+  return jwt.verify(token, keys.public, { iss: ISSUER, aud: REFRESH_AUD });
 }
 
 // throws Invalid Signature if signature is bad
-module.verifyAccessToken = (token, callback) => {
-    return jwt.verify(token, keys.public,
-      { iss: ISSUER, aud: ACCESS_AUD }, callback);
+exports.verifyAccessToken = (token, callback=undefined) => {
+  if(callback)
+    return jwt.verify(token, keys.public, { iss: ISSUER, aud: ACCESS_AUD }, callback);
+  return jwt.verify(token, keys.public, { iss: ISSUER, aud: ACCESS_AUD });
 }
 
-module.generateRefreshToken = (user, expr) => {
+exports.generateRefreshToken = (user) => {
   return jwt.sign(
     {
       iss: ISSUER,
@@ -27,29 +29,30 @@ module.generateRefreshToken = (user, expr) => {
     },
     keys.private,
     {
-        algorithm: 'RS256',
+        algorithm: keys.algorithm,
         expiresIn: '30d'
     }
   );
 }
 
-module.generateAccessToken = (refreshToken, expr) => {
-  verifyRefreshToken(refreshToken, (err, decoded) => {
-    if (err) {
-      console.error(err);
-      return false;
-    }
-    return jwt.sign(
-      {
-        iss: ISSUER,
-        sub: user,
-        aud: ACCESS_AUD
-      },
-      keys.private,
-      {
-        algorithm: 'RS256',
-        expiresIn: '1h'
+exports.generateAccessToken = (refreshToken) => {
+  return new Promise((resolve, reject) => {
+    exports.verifyRefreshToken(refreshToken, (err, decoded) => {
+      if (err) {
+        reject(err);
       }
-    );
+      resolve(jwt.sign(
+        {
+          iss: ISSUER,
+          sub: refreshToken,
+          aud: ACCESS_AUD
+        },
+        keys.private,
+        {
+          algorithm: keys.algorithm,
+          expiresIn: '1h'
+        }
+      ));
+    });
   });
 }

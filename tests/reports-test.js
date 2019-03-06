@@ -36,7 +36,6 @@ describe('reports.js', () => {
   describe('#all()', () => {
     it('should return a list of all reports', done => {
       reports.all().then(res => {
-        console.log(res);
         done();
       }).catch(err => {
         done(err);
