@@ -8,19 +8,15 @@ const ACCESS_AUD = 'access';
 const REFRESH_AUD = 'refresh';
 // throws Invalid Signature if signature is bad
 exports.verifyRefreshToken = (token, callback=undefined) => {
-  if (callback)
-    return jwt.verify(token, keys.public, { iss: ISSUER, aud: REFRESH_AUD }, callback);
-  return jwt.verify(token, keys.public, { iss: ISSUER, aud: REFRESH_AUD });
+  return jwt.verify(token, keys.public, { iss: ISSUER, aud: REFRESH_AUD }, callback);
 }
 
 // throws Invalid Signature if signature is bad
 exports.verifyAccessToken = (token, callback=undefined) => {
-  if(callback)
-    return jwt.verify(token, keys.public, { iss: ISSUER, aud: ACCESS_AUD }, callback);
-  return jwt.verify(token, keys.public, { iss: ISSUER, aud: ACCESS_AUD });
+  return jwt.verify(token, keys.public, { iss: ISSUER, aud: ACCESS_AUD }, callback);
 }
 
-exports.generateRefreshToken = (user) => {
+exports.generateRefreshToken = (user, callback=undefined) => {
   return jwt.sign(
     {
       iss: ISSUER,
@@ -31,7 +27,7 @@ exports.generateRefreshToken = (user) => {
     {
         algorithm: keys.algorithm,
         expiresIn: '30d'
-    }
+    }, callback
   );
 }
 

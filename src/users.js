@@ -41,7 +41,7 @@ module.exports = class Reports {
 
   login(user, password) {
     return new Promise((resolve, reject) => {
-      this.db.each('SELECT * FROM users WHERE user is ? LIMIT 1', user,
+      this.db.get('SELECT * FROM users WHERE user is ?', user,
       (err, row) => {
         if (err)
           reject(err);
