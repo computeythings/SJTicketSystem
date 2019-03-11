@@ -1,5 +1,5 @@
 "use strict"
-const usersDB = require('../src/users.js');
+const usersDB = require('../controllers/users.js');
 const assert = require('assert');
 
 const testUser = "testerson";

@@ -1,6 +1,6 @@
 "user strict"
 const assert = require('assert');
-const tokens = require('../src/tokenhandler.js');
+const tokens = require('../util/tokenhandler.js');
 
 describe('tokenhandler.js', () => {
   var refreshToken;

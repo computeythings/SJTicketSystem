@@ -1,6 +1,6 @@
 "use strict";
 const assert = require('assert');
-const web = require('../src/index.js');
+const web = require('../app.js');
 
 describe('index.js', () => {
   describe('GET /', () => {
@@ -11,7 +11,7 @@ describe('index.js', () => {
     it('should 301 redirect authenitcated browsers');
     it('should resolve a status 200 for unauthenitcated browsers');
   });
-  
+
   describe('POST /login', () => {
     it('should resolve 401 on a bad login');
     it('should 301 redirect to to main page on a successful login');

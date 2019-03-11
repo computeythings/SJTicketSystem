@@ -1,5 +1,5 @@
 "use strict"
-const reportsDB = require('../src/reports.js');
+const reportsDB = require('../controllers/reports.js');
 const assert = require('assert');
 
 const testReport = {

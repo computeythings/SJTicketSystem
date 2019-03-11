@@ -1,7 +1,7 @@
 "use strict"
 const jwt = require('jsonwebtoken');
 const fs = require('fs');
-const keys = require('../lib/keys.js');
+const keys = require('./keys.js');
 
 const ISSUER =  'IT-Reports';
 const ACCESS_AUD = 'access';
