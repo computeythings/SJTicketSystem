@@ -1,15 +1,12 @@
 "use strict"
 
 const sql = require('sqlite3');
+const DATABASE = process.env.REPORTS_DATABASE || ':memory:';
 
 module.exports = class Reports {
-  constructor(dbLocation) {
-    this.dbLocation = dbLocation;
-  }
-
   init() {
     return new Promise((resolve, reject) => {
-      this.db = new sql.Database(this.dbLocation);
+      this.db = new sql.Database(DATABASE);
       this.db.run(
         'CREATE TABLE IF NOT EXISTS reports ' +
         '(category TEXT, requestedBy TEXT, title TEXT, description TEXT, ' +
@@ -52,7 +49,7 @@ module.exports = class Reports {
     });
   }
 
-  editReport(id, report) {
+  updateReport(id, report) {
     return new Promise((resolve, reject) => {
       this.db.run(
         'UPDATE reports SET category = $category, ' +
@@ -65,7 +62,7 @@ module.exports = class Reports {
           $title: report.title,
           $description: report.description,
           $date: report.date
-        }, (err) => {
+        }, function(err) {
           if(err)
             reject(err);
           resolve(this.lastID);
@@ -75,7 +72,7 @@ module.exports = class Reports {
 
   deleteReport(id) {
     return new Promise((resolve, reject) => {
-      this.db.run('DELETE FROM reports WHERE rowid=?', id, (err) => {
+      this.db.run('DELETE FROM reports WHERE rowid=?', id, function(err) {
         if (err)
           reject(err);
         resolve(this.lastID);
