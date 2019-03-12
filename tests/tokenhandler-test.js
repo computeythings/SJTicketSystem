@@ -1,6 +1,7 @@
 "use strict"
 require('dotenv').config();
 process.env.SERVER_NAME = 'TEST_SERVER_NAME';
+process.env.SECRET = 'S3KRET';
 
 const jwt = require('jsonwebtoken');
 const tokens = require('../util/tokenhandler.js');

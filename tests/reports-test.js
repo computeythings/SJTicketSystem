@@ -1,21 +1,25 @@
 "use strict"
-const reportsDB = require('../controllers/reports.js');
 const assert = require('assert');
+const reports = require('../controllers/reports.js');
+const Report = require('../models/report.js')
 
-const testReport = {
-  category: 'Test Category',
-  requestedBy: 'Test User',
-  title: 'Test Title',
-  description: 'This is my test description.',
-  date: Date.now()
-};
+const testReport = new Report(
+  'Test Title',
+  'Test User',
+  'Test Category',
+  'This is my test description.',
+  Date.now()
+);
 
-var reports;
+// Before we start, we want to make sure the database has been initialized
 before((done) => {
-  new reportsDB().init().then((db) => {
-    reports = db;
-    done();
-  });
+  (function start() {
+    if(reports.initialized()) {
+      done();
+    } else {
+      setTimeout(start, 100);
+    }
+  })();
 });
 
 after(() => {

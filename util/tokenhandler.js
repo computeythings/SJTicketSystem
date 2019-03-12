@@ -3,14 +3,14 @@ require('dotenv').config();
 const jwt = require('jsonwebtoken');
 const fs = require('fs');
 
-const ACCESS_AUD = 'access';
-const REFRESH_AUD = 'refresh';
-const ISSUER =  process.env.SERVER_NAME || 'IT-Reporting';
+const ISSUER =  process.env.SERVER_NAME || 'IT-Reports';
 const CERT = process.env.SERVER_CERT ? fs.readFileSync(process.env.SERVER_CERT) : process.env.SECRET;
 const KEY = process.env.SERVER_KEY ? fs.readFileSync(process.env.SERVER_KEY) : process.env.SECRET;
 // expiration values are in seconds
 const ACCESS_EXP = 60*60 // 1 hour expiration
 const REFRESH_EXP = 60*60*24*30 // 30 day expiration
+const ACCESS_AUD = 'access';
+const REFRESH_AUD = 'refresh';
 
 /*
   use symmetrical encryption if a secret exists,
@@ -35,12 +35,12 @@ exports.generateRefreshToken = (id, callback, exp=REFRESH_EXP, key=KEY) => {
     {
       iss: ISSUER,
       sub: id,
-      aud: REFRESH_AUD,
-      exp: Math.floor(Date.now() / 1000) + exp
+      aud: REFRESH_AUD
     },
-    process.env.SECRET,
+    key,
     {
-        algorithm: ALGORITHM
+        algorithm: ALGORITHM,
+        expiresIn: exp
     }, callback
   );
 }
@@ -56,7 +56,7 @@ exports.generateAccessToken = (refreshToken, callback, exp=ACCESS_EXP,
             iss: ISSUER,
             sub: decoded.sub,
             aud: ACCESS_AUD,
-            exp: Math.floor(Date.now() / 1000) + exp
+            exp: exp
           },
           key,
           {
@@ -67,18 +67,17 @@ exports.generateAccessToken = (refreshToken, callback, exp=ACCESS_EXP,
     })
   } else {
     try {
-      console.log(cert, KEY, ALGORITHM);
       let decoded = this.verifyRefreshToken(refreshToken, null, cert);
       return jwt.sign(
         {
           iss: ISSUER,
           sub: decoded.sub,
-          aud: ACCESS_AUD,
-          exp: Math.floor(Date.now() / 1000) + exp
+          aud: ACCESS_AUD
         },
         key,
         {
-          algorithm: ALGORITHM
+          algorithm: ALGORITHM,
+          expiresIn: exp
         }
       );
     } catch(err) {
