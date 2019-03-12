@@ -12,7 +12,7 @@ const testReport = {
 
 var reports;
 before((done) => {
-  new reportsDB(':memory:').init().then((db) => {
+  new reportsDB().init().then((db) => {
     reports = db;
     done();
   });

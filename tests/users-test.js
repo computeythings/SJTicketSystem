@@ -1,13 +1,14 @@
 "use strict"
-const usersDB = require('../controllers/users.js');
 const assert = require('assert');
+const usersDB = require('../controllers/users.js');
+const User = require('../models/user.js');
 
-const testUser = "testerson";
-const testPwd = "testPassword";
+const testUser = new User("testerson", "testPassword");
+
 
 var users;
 before((done) => {
-  new usersDB(':memory:').init().then((db) => {
+  new usersDB().init().then((db) => {
     users = db;
     done();
   });
@@ -18,9 +19,9 @@ after(() => {
 });
 
 describe('users.js', () => {
-  describe('#addUser(user,pass)', () => {
+  describe('#addUser(user)', () => {
     it('should successfully add a test user', (done) => {
-      users.addUser(testUser, testPwd).then((result) => {
+      users.addUser(testUser).then((result) => {
         if (result)
           done();
       }).catch(err => {
@@ -28,18 +29,18 @@ describe('users.js', () => {
       });
     });
   });
-  describe('#getUser(user)', () => {
+  describe('#getUser(name)', () => {
     it('should return the info of the user requested', done => {
-      users.getUser(testUser).then(result => {
+      users.getUser(testUser.name).then(result => {
         done();
       }).catch(err => {
         done(err);
       })
     });
   });
-  describe('#login(user,pass)', () => {
+  describe('#login(user)', () => {
     it('should successfully login the test user', done => {
-      users.login(testUser, testPwd).then(result => {
+      users.login(testUser).then(result => {
         if(result)
           done();
       }).catch(err => {

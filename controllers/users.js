@@ -1,17 +1,14 @@
 "use strict"
-
+require('dotenv').config();
 const sql = require('sqlite3');
 const bcrypt = require('bcrypt');
 const SALT_ROUNDS = 10;
+const DATABASE = process.env.USERS_DATABASE || ':memory:';
 
 module.exports = class Reports {
-  constructor(dbLocation) {
-    this.dbLocation = dbLocation;
-  }
-
   init() {
     return new Promise((resolve, reject) => {
-      this.db = new sql.Database(this.dbLocation);
+      this.db = new sql.Database(DATABASE);
       this.db.run(
           'CREATE TABLE IF NOT EXISTS users ' +
           '(user TEXT UNIQUE, password TEXT, admin INTEGER)', (err) => {
@@ -23,30 +20,30 @@ module.exports = class Reports {
     });
   }
 
-  addUser(user, password) {
+  addUser(user) {
     return new Promise((resolve, reject) => {
-      bcrypt.hash(password, SALT_ROUNDS, (err, hash) => {
+      bcrypt.hash(user.password, SALT_ROUNDS, (err, hash) => {
           if (err)
             reject(err);
           this.db.run(
             'INSERT INTO users (user, password, admin) ' +
             'VALUES ($user, $hash, 0)', {
-              $user: user,
-              $hash: hash
+              $user: user.name,
+              $hash: user.password
             });
           resolve(true);
       });
     });
   }
 
-  login(user, password) {
+  login(user) {
     return new Promise((resolve, reject) => {
-      this.db.get('SELECT * FROM users WHERE user is ?', user,
+      this.db.get('SELECT * FROM users WHERE user is ?', user.name,
       (err, row) => {
         if (err)
           reject(err);
         else {
-          bcrypt.compare(password, row.password, (err, res) => {
+          bcrypt.compare(user.password, row.password, (err, res) => {
             if (res)
               resolve(res);
             else
@@ -57,18 +54,18 @@ module.exports = class Reports {
     });
   }
 
-  getUser(user) {
+  getUser(name) {
     return new Promise((resolve, reject) => {
       this.db.each('SELECT user, admin FROM users WHERE user is ? LIMIT 1',
-      user, (err, row) => {
+      name, (err, row) => {
         if (err) { reject(err); }
         resolve(row);
       });
     });
   }
 
-  deleteUser(id) {
-    this.db.run('DELETE FROM users WHERE rowid=?', id, (err) => {
+  deleteUser(name) {
+    this.db.run('DELETE FROM users WHERE rowid=?', name, function(err) {
       if (err)
         console.error(err);
       else

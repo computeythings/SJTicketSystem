@@ -40,7 +40,7 @@ describe('tokenhandler.js', () => {
         tokens.generateAccessToken(fakeTokenRef);
         done(Error('Failed to reject falsified token'));
       } catch(err) {
-        assert.equal('JsonWebTokenError', err.name);
+        assert.equal(err.name, 'JsonWebTokenError');
         done();
       }
     });
@@ -58,7 +58,7 @@ describe('tokenhandler.js', () => {
         tokens.verifyRefreshToken(fakeTokenRef);
         done(Error('Failed to reject falsified token'));
       } catch(err) {
-        assert.equal('JsonWebTokenError', err.name);
+        assert.equal(err.name, 'JsonWebTokenError');
         done();
       }
     });
@@ -66,10 +66,10 @@ describe('tokenhandler.js', () => {
     it('should throw an error if a token is expired', done => {
       // I couldn't get assert.throws to work here to this is the workaround
       try {
-        tokens.verifyAccessToken(expiredRef);
+        tokens.verifyRefreshToken(expiredRef);
         done(Error('Failed to reject falsified token'));
       } catch(err) {
-        assert.equal('TokenExpiredError', err.name);
+        assert.equal(err.name, 'TokenExpiredError');
         done();
       }
     });
@@ -87,7 +87,7 @@ describe('tokenhandler.js', () => {
         tokens.verifyAccessToken(fakeTokenAcc);
         done(Error('Failed to reject falsified token'));
       } catch(err) {
-        assert.equal('JsonWebTokenError', err.name);
+        assert.equal(err.name, 'JsonWebTokenError');
         done();
       }
     });
@@ -98,7 +98,7 @@ describe('tokenhandler.js', () => {
         tokens.verifyAccessToken(expiredAcc);
         done(Error('Failed to reject falsified token'));
       } catch(err) {
-        assert.equal('TokenExpiredError', err.name);
+        assert.equal(err.name, 'TokenExpiredError');
         done();
       }
     });
