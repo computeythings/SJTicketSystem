@@ -4,8 +4,8 @@ const LocalStrategy = require('passport-local').Strategy;
 const passportJWT = require('passport-jwt');
 const JWTStrategy = passportJWT.Strategy;
 
-const tokens = require('../tokenhandler.js');
-const keys = require('../lib/keys.js');
+const KEY = process.env.SERVER_KEY ? fs.readFileSync(process.env.SERVER_KEY) : process.env.SECRET;
+const tokens = require('../util/tokenhandler.js');
 
 
 passport.use(new LocalStrategy(
@@ -19,12 +19,12 @@ passport.use(new LocalStrategy(
     } catch(err) {
       done(err);
     }
-  });
+  })
 );
-
+/*
 passport.use(new JWTStrategy({
     jwtFromRequest: req => req.cookies.jwt,
-    secretOrKey: keys.public
+    secretOrKey: KEY
   }, (jwtPayload, done) => {
     tokens.verifyAccessToken(jwtPayload, keys.public, (err, decoded) => {
       if (err) { return done(err.message); }
@@ -32,5 +32,4 @@ passport.use(new JWTStrategy({
     });
   })
 );
-
-module.exports = passport;
+*/

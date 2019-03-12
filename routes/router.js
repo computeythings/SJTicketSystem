@@ -16,16 +16,4 @@ router.get('/register', (req, res) => {
 
 });
 
-router.post('/reports', (req, res) => {
-
-});
-router.get('/reports', (req, res) => {
-
-});
-
-router.post('/users', (req, res) => {
-
-});
-router.get('/users', (req, res) => {
-
-});
+module.exports = router;
