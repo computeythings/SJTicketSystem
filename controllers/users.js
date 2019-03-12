@@ -8,8 +8,9 @@ const DATABASE = process.env.USERS_DATABASE || ':memory:';
 var initialized = false;
 const db = new sql.Database(DATABASE);
 db.run('CREATE TABLE IF NOT EXISTS users ' +
-  '(user TEXT UNIQUE, password TEXT, admin INTEGER)', [], () => {
-    initialized = true;
+  '(user TEXT UNIQUE, password TEXT, admin INTEGER)', err => {
+    if(!err)
+      initialized = true;
   });
 
 exports.addUser = user => {
