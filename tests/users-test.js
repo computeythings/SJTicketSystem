@@ -1,17 +1,20 @@
 "use strict"
 const assert = require('assert');
-const usersDB = require('../controllers/users.js');
+const users = require('../controllers/users.js');
 const User = require('../models/user.js');
 
 const testUser = new User("testerson", "testPassword");
 
 
-var users;
+// Before we start, we want to make sure the database has been initialized
 before((done) => {
-  new usersDB().init().then((db) => {
-    users = db;
-    done();
-  });
+  (function() {
+    if(users.initialized()) {
+      done();
+    } else {
+      setTimeout(this, 100);
+    }
+  })();
 });
 
 after(() => {
