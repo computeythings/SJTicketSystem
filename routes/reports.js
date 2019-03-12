@@ -1,8 +1,7 @@
 "use strict"
 const express = require('express');
 const router = express.Router();
-const db = require('../controllers/reports.js');
-const reports = new db().init();
+const reports = require('../controllers/reports.js');
 
 router.post('/reports', (req, res) => {
 

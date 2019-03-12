@@ -1,39 +1,46 @@
 "use strict"
 const express = require('express');
 const router = express.Router();
-const db = require('../controllers/users.js');
-var users;
-new db().init().then(res => {
-    users = res;
+const users = require('../controllers/users.js');
+const User = require('../models/user.js');
+
+router.post('/users/add', (req, res) => {
+  let { username, password } = req.body;
+  users.addUser(new User(username, password));
 });
 
-router.post('/users', (req, res) => {
-
+router.post('/users/delete', (req, res) => {
+  users.deleteUser(req.user);
 });
+
+/* TODO
+router.post('/users/update', (req, res) => {
+});
+*/
 
 router.get('/users', (req, res) => {
-  awaitDatabase(0, () => {
-    res.render('users', {
-      title: 'Users Index',
-      header: 'Users',
-      users: users.all()
-    });
-  }, () => {
-    res.status(503).send('ERROR 503: DATABASE NOT YET INITIALIZED');
-  });
+  // delay rendering the page until the database is initialized
+  (function(timer) {
+    if(users.initialized()) {
+      res.render('users', {
+        title: 'IT Reporting - Users',
+        header: 'Users',
+        users: users.all()
+      });
+    } else if(timer < 500) {
+      setTimeout(this, 100, timer+100);
+    // timeout after 500ms
+    } else {
+      console.error('Failed to load users database');
+      res.status(503).send('ERROR 503: DATABASE NOT YET INITIALIZED');
+    }
+  })(0);
 });
 
-awaitDatabase(timer, callback, timeout) {
-  if(!users) {
-    if(timer >= 1000) {
-      timeout();
-    } else {
-      timer+= 100;
-      setTimeout(awaitDatabase(timer, callback, timeout), 100);
-    }
-  } else {
-    callback();
-  }
-}
+router.get('/users/add', (req, res) => {
+  res.render('add_user', {
+    heading: 'Add a new users'
+  });
+});
 
 module.exports = router;

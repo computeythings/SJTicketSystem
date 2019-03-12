@@ -4,5 +4,5 @@ html
     h1= heading
 
     ul
-      each report in reports
+      each report in reports.length ? reports : ['THERE ARE NO REPORTS']
         li= report

@@ -13,6 +13,19 @@ db.run('CREATE TABLE IF NOT EXISTS users ' +
       initialized = true;
   });
 
+exports.all = () => {
+  return new Promise((resolve, reject) => {
+    var usersList = [];
+    db.each('SELECT * FROM users', (err, row) => {
+      if (err) { reject(err); }
+      usersList.push(row);
+    }, err => {
+      if (err) { reject(err); }
+      resolve(usersList);
+    });
+  })
+}
+
 exports.addUser = user => {
   return new Promise((resolve, reject) => {
     bcrypt.hash(user.password, SALT_ROUNDS, (err, hash) => {
@@ -33,8 +46,8 @@ exports.login = user => {
   return new Promise((resolve, reject) => {
     db.get('SELECT * FROM users WHERE user is ?', user.name,
     (err, row) => {
-      if (err)
-        reject(err);
+      if (err || !row)
+        reject(err ? err : 'The username you have entered does not exist');
       else {
         bcrypt.compare(user.password, row.password, (err, res) => {
           if (res)

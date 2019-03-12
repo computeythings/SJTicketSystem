@@ -1,0 +1,15 @@
+html
+  title Add User
+  body
+  h2 Add a user:
+  form(method='POST' action='/users/add')
+    div.form-group
+      label(for='name') Name:
+      input#name.form-control(type='text' name='username')
+    div.form-group
+      label(for='pw') Password:
+      input#pw.form-control(type='password' name='password')
+    div.form-group
+      label(for='pw_confirm') Confirm Password:
+      input#pw_confirm.form-control(type='password' name='password_confirm')
+    button.btn.btn-primary(type='submit') Add
