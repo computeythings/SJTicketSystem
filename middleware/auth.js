@@ -5,7 +5,6 @@ const passportJWT = require('passport-jwt');
 const JWTStrategy = passportJWT.Strategy;
 
 const tokens = require('../tokenhandler.js');
-const keys = require('../lib/keys.js');
 
 
 passport.use(new LocalStrategy(
