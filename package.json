@@ -4,19 +4,21 @@
   "description": "SQL DB for reporting and tracking IT requests",
   "main": "app.js",
   "scripts": {
-    "test": "set NODE_ENV=test&&node ./node_modules/mocha/bin/mocha tests/*-test.js",
-    "test-server": "set NODE_ENV=test&&node ./node_modules/nodemon/bin/nodemon --verbose app.js"
+    "start": "set NODE_ENV=PRODUCTION&&node app.js",
+    "test": "set NODE_ENV=TEST&&node ./node_modules/mocha/bin/mocha tests/*-test.js",
+    "test-server": "set NODE_ENV=TEST&&node ./node_modules/nodemon/bin/nodemon --verbose app.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^3.0.4",
+    "cookie-parser": "^1.4.4",
     "dotenv": "^6.2.0",
     "express": "^4.16.4",
     "express-session": "^1.15.6",
     "jsonwebtoken": "^8.4.0",
     "passport": "^0.4.0",
-    "passport-jwt": "^4.0.0",
+    "passport-custom": "^1.0.5",
     "passport-local": "^1.0.0",
     "pug": "^2.0.3",
     "source": "0.0.3",

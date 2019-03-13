@@ -1,9 +1,9 @@
 const fs = require('fs');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
-const passportJWT = require('passport-jwt');
-const JWTStrategy = passportJWT.Strategy;
+const CustomStrategy = require('passport-custom');
 const users = require('../controllers/users.js');
+const tokens = require('../util/tokenhandler.js');
 
 
 passport.use(new LocalStrategy(
@@ -11,7 +11,7 @@ passport.use(new LocalStrategy(
     try {
       let loginSuccess = await users.login(username, password);
       if (loginSuccess) {
-        return done(null, username);
+        return done(null, loginSuccess);
       }
       return done(null, false, { message: 'Incorrect username or password.' });
     } catch(err) {
@@ -19,15 +19,13 @@ passport.use(new LocalStrategy(
     }
   })
 );
-/*
-passport.use(new JWTStrategy({
-    jwtFromRequest: req => req.cookies.jwt,
-    secretOrKey: KEY
-  }, (jwtPayload, done) => {
-    tokens.verifyAccessToken(jwtPayload, keys.public, (err, decoded) => {
-      if (err) { return done(err.message); }
-      return done(null, jwtPayload);
-    });
-  })
-);
-*/
+
+passport.use('jwt', new CustomStrategy((req, done) => {
+  if(!req.cookies || !req.cookies.jwt)
+    return done(null, false, {message: 'No JWT'});
+
+  tokens.verifyAccessToken(req.cookies.jwt, (err, decoded) => {
+    if (err) { return done(err.message); }
+    return done(null, decoded);
+  });
+}));

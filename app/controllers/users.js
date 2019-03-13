@@ -2,13 +2,14 @@
 require('dotenv').config();
 const sql = require('sqlite3');
 const bcrypt = require('bcrypt');
+const User = require('../models/user');
 const SALT_ROUNDS = 10;
 const DATABASE = process.env.USERS_DATABASE || ':memory:';
 
 var initialized = false;
 const db = new sql.Database(DATABASE);
 db.run('CREATE TABLE IF NOT EXISTS users ' +
-  '(user TEXT UNIQUE, password TEXT, admin INTEGER)', err => {
+  '(username TEXT UNIQUE, password TEXT, admin INTEGER)', function(err) {
     if(!err)
       initialized = true;
   });
@@ -32,26 +33,31 @@ exports.addUser = user => {
         if (err)
           reject(err);
         db.run(
-          'INSERT INTO users (user, password, admin) ' +
-          'VALUES ($user, $hash, 0)', {
+          'INSERT INTO users (username, password, admin) ' +
+          'VALUES ($user, $hash, $isAdmin)', {
             $user: user.name,
-            $hash: user.password
+            $hash: hash,
+            $isAdmin: user.isAdmin
+          }, err => {
+            if(err)
+              reject(err);
           });
-        resolve(true);
     });
   });
 }
 
-exports.login = user => {
+exports.login = (username, password) => {
   return new Promise((resolve, reject) => {
-    db.get('SELECT * FROM users WHERE user is ?', user.name,
+    db.get('SELECT * FROM users WHERE username is ?', username,
     (err, row) => {
       if (err || !row)
         reject(err ? err : 'The username you have entered does not exist');
       else {
-        bcrypt.compare(user.password, row.password, (err, res) => {
-          if (res)
-            resolve(res);
+        bcrypt.compare(password, row.password, (err, res) => {
+          if (res) {
+            row.password = '********';
+            resolve(row);
+          }
           else
             reject(err);
         });
@@ -62,7 +68,7 @@ exports.login = user => {
 
 exports.getUser = name => {
   return new Promise((resolve, reject) => {
-    db.each('SELECT user, admin FROM users WHERE user is ? LIMIT 1',
+    db.each('SELECT username, admin FROM users WHERE username is ? LIMIT 1',
     name, (err, row) => {
       if (err) { reject(err); }
       resolve(row);

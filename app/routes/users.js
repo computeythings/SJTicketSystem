@@ -38,7 +38,7 @@ router.get('/users', (req, res) => {
 });
 
 router.get('/users/add', (req, res) => {
-  res.render('add_user', {
+  res.render('users_add', {
     heading: 'Add a new users'
   });
 });
