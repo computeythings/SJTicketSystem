@@ -6,7 +6,10 @@ const tokens = require('../util/tokenhandler');
 
 router.post('/login', (req, res) => {
   passport.authenticate('local', { session: true }, (err, user) => {
-    if (err) { res.status(400).json({ err }); }
+    if (err) {
+      res.status(301).redirect('/login');
+      return;
+    }
 
     req.login(user, { session: false }, (err) => {
       if (err) { res.status(400).json({ err }); }
