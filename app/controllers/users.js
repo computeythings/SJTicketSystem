@@ -51,7 +51,7 @@ exports.login = (username, password) => {
     db.get('SELECT * FROM users WHERE username is ?', username,
     (err, row) => {
       if (err || !row)
-        reject(err ? err : 'The username you have entered does not exist');
+        reject(err ? err : 'The username entered does not exist.');
       else {
         bcrypt.compare(password, row.password, (err, res) => {
           if (res) {

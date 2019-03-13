@@ -23,6 +23,9 @@ main.login-form
           .card-header= header
           .card-body
             form(action='/login' method='POST')
+              if err
+                .form-group.row.alert.alert-danger
+                  strong= err
               .form-group.row
                 label.col-md-4.col-form-label.text-md-right(for='username') Username
                 .col-md-6
