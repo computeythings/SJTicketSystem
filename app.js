@@ -17,10 +17,10 @@ app.use(session({
   resave: false,
   saveUninitialized: true
 }));
-app.use(require('./app/routes/reports'));
-app.use(require('./app/routes/users'));
-app.use(require('./app/routes/auth'));
 app.use(require('./app/routes/index'));
+app.use(require('./app/routes/auth'));
+app.use(require('./app/routes/users'));
+app.use(require('./app/routes/reports'));
 
 app.listen(8000, () => {
   console.log('Server running on http://localhost:8000/')

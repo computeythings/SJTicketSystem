@@ -10,7 +10,6 @@ passport.use(new LocalStrategy(
   async (username, password, done) => {
     try {
       let loginSuccess = await users.login(username, password);
-      console.log('LOGIN', loginSuccess);
       if (loginSuccess) {
         return done(null, loginSuccess);
       }

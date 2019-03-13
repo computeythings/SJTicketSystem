@@ -10,8 +10,13 @@ var initialized = false;
 const db = new sql.Database(DATABASE);
 db.run('CREATE TABLE IF NOT EXISTS users ' +
   '(username TEXT UNIQUE, password TEXT, admin INTEGER)', function(err) {
-    if(!err)
-      initialized = true;
+    if(!err) {
+      exports.all().then((res) => {
+        if(res.length === 0)
+          exports.addUser(new User('admin', 'admin', true));
+        initialized = true;
+      });
+    }
   });
 
 exports.all = () => {
