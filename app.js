@@ -18,7 +18,7 @@ app.use(session({
   saveUninitialized: true
 }));
 app.use(require('./app/routes/index'));
-app.use(require('./app/routes/auth'));
+app.use(require('./app/routes/login'));
 app.use(require('./app/routes/users'));
 app.use(require('./app/routes/reports'));
 
