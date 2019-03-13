@@ -47,19 +47,22 @@ exports.addUser = user => {
 }
 
 exports.login = (username, password) => {
+  console.log('loggin', username, password);
   return new Promise((resolve, reject) => {
     db.get('SELECT * FROM users WHERE username is ?', username,
     (err, row) => {
+      console.log(row);
       if (err || !row)
         reject(err ? err : 'The username you have entered does not exist');
       else {
         bcrypt.compare(password, row.password, (err, res) => {
+          console.log('RESULT',res);
           if (res) {
             row.password = '********';
             resolve(row);
           }
           else
-            reject(err);
+            reject(err || new Error('Incorrect Password'));
         });
       }
     });
