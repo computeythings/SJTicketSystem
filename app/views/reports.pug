@@ -1,8 +1,8 @@
-html
-  title= title
-  body
-    h1= heading
+include header.pug
 
-    ul
-      each report in reports.length ? reports : ['THERE ARE NO REPORTS']
-        li= report
+body
+  h1= heading
+
+  ul
+    each report in reports.length ? reports : ['THERE ARE NO REPORTS']
+      li= report

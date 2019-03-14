@@ -1,9 +1,14 @@
-html
-  title= title
-  body
-    h1= heading
+include header.pug
+body
+  h1= heading
 
-    ul
-      each user in users.length ? users : ['THERE ARE NO USERS']
-        li= user
-    a(href='/users/add') Add
+  table.users
+    tr
+      th Username
+      th Admin
+    each user in users
+      tr
+        td= user.username
+        td= user.admin ? 'Yes' : 'No'
+
+  a(href='/users/add') Add
