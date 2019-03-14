@@ -6,7 +6,12 @@ const User = require('../models/user.js');
 
 router.post('/users/add', (req, res) => {
   let { username, password } = req.body;
-  users.addUser(new User(username, password));
+  let user = new User(username, password, req.body.isAdmin === 'on');
+  users.addUser(user).then(result => {
+    res.status(201).redirect('/users');
+  }).catch(err => {
+    res.status(503).send(err);
+  });
 });
 
 router.post('/users/delete', (req, res) => {
