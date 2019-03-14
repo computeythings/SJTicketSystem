@@ -43,9 +43,11 @@ exports.addUser = user => {
             $user: user.name,
             $hash: hash,
             $isAdmin: user.isAdmin
-          }, err => {
+          }, function(err) {
             if(err)
               reject(err);
+            else
+              resolve(this.lastID);
           });
     });
   });
@@ -82,11 +84,13 @@ exports.getUser = name => {
 }
 
 exports.deleteUser = name => {
-  db.run('DELETE FROM users WHERE rowid=?', name, function(err) {
-    if (err)
-      console.error(err);
-    else
-      console.log(this.changes);
+  return new Promise((resolve, reject) => {
+    db.run('DELETE FROM users WHERE rowid=?', name, function(err) {
+      if (err)
+        reject(err);
+      else
+        resolve(this.changes);
+    });
   });
 }
 
