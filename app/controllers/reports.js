@@ -6,8 +6,8 @@ const DATABASE = process.env.REPORTS_DATABASE || ':memory:';
 var initialized = false;
 const db = new sql.Database(DATABASE);
 db.run('CREATE TABLE IF NOT EXISTS reports ' +
-'(category TEXT, requestedBy TEXT, title TEXT, description TEXT, ' +
-'date INTEGER)', err => {
+'(category TEXT, requestedBy TEXT, subject TEXT, description TEXT, ' +
+'assignedTo TEXT, closed INTEGER, date INTEGER)', err => {
   if(!err)
     initialized = true;
 });
@@ -15,7 +15,20 @@ db.run('CREATE TABLE IF NOT EXISTS reports ' +
 exports.all = () => {
   return new Promise((resolve, reject) => {
     var reportsList = [];
-    db.each('SELECT * FROM reports', (err, row) => {
+    db.each('SELECT * FROM reports ORDER BY date DESC', (err, row) => {
+      if (err) { reject(err); }
+      reportsList.push(row);
+    }, err => {
+      if (err) { reject(err); }
+      resolve(reportsList);
+    });
+  })
+}
+
+exports.allOpen = () => {
+  return new Promise((resolve, reject) => {
+    var reportsList = [];
+    db.each('SELECT * FROM reports WHERE closed != 1', (err, row) => {
       if (err) { reject(err); }
       reportsList.push(row);
     }, err => {
@@ -28,16 +41,23 @@ exports.all = () => {
 exports.addReport = report => {
   return new Promise((resolve, reject) => {
     db.run(
-      'INSERT INTO reports (category, requestedBy, title, description, date) ' +
-      'VALUES ($category, $requestedBy, $title, $description, $date)', {
+      'INSERT INTO reports (category, requestedBy, subject, description, ' +
+      'assignedTo, closed, date) ' +
+      'VALUES ($category, $requestedBy, $subject, $description, ' +
+      '$assignedTo, $closed, $date)', {
         $category: report.category,
         $requestedBy: report.requestedBy,
-        $title: report.title,
+        $subject: report.subject,
         $description: report.description,
+        $assignedTo: report.assignedTo,
+        $closed: report.closed,
         $date: report.date
       }, function(err) {
-        if(err)
+        if(err) {
+          console.error(err);
           reject(err);
+          return;
+        }
         resolve(this.lastID);
     });
   });
@@ -48,13 +68,17 @@ exports.updateReport = (id, report) => {
     db.run(
       'UPDATE reports SET category = $category, ' +
       'requestedBy = $requestedBy,' +
-      'title = $title,' +
+      'subject = $subject,' +
       'description = $description,' +
+      'assignedTo = $assignedTo' +
+      'closed = $closed' +
       'date = $date', {
         $category: report.category,
         $requestedBy: report.requestedBy,
-        $title: report.title,
+        $subject: report.subject,
         $description: report.description,
+        $assignedTo: report.assignedTo,
+        $closed: report.closed,
         $date: report.date
       }, function(err) {
         if(err)
