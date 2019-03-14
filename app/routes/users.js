@@ -22,10 +22,14 @@ router.get('/users', (req, res) => {
   // delay rendering the page until the database is initialized
   (function(timer) {
     if(users.initialized()) {
-      res.render('users', {
-        title: 'IT Reporting - Users',
-        header: 'Users',
-        users: users.all()
+      users.all().then(result => {
+        res.render('users', {
+          title: 'IT Reporting - Users',
+          heading: 'Users',
+          users: result
+        });
+      }).catch(err => {
+        res.status(503).send(err);
       });
     } else if(timer < 500) {
       setTimeout(this, 100, timer+100);
@@ -39,6 +43,7 @@ router.get('/users', (req, res) => {
 
 router.get('/users/add', (req, res) => {
   res.render('users_add', {
+    title: 'Add User',
     heading: 'Add a new users'
   });
 });

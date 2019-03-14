@@ -30,12 +30,13 @@ exports.verifyAccessToken = (token, callback, cert=CERT) => {
     callback);
 }
 
-exports.generateRefreshToken = (id, callback, exp=REFRESH_EXP, key=KEY) => {
+exports.generateRefreshToken = (user, callback, exp=REFRESH_EXP, key=KEY) => {
   return jwt.sign(
     {
       iss: ISSUER,
-      sub: id,
-      aud: REFRESH_AUD
+      sub: user.name,
+      aud: REFRESH_AUD,
+      admin: user.isAdmin
     },
     key,
     {
@@ -56,11 +57,12 @@ exports.generateAccessToken = (refreshToken, callback, exp=ACCESS_EXP,
             iss: ISSUER,
             sub: decoded.sub,
             aud: ACCESS_AUD,
-            exp: exp
+            admin: decoded.admin
           },
           key,
           {
-            algorithm: ALGORITHM
+            algorithm: ALGORITHM,
+            expiresIn: exp
           }, callback
         ));
       }, cert);

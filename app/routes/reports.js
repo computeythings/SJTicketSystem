@@ -9,7 +9,7 @@ router.post('/reports', (req, res) => {
 router.get('/reports', (req, res) => {
   res.render('reports', {
     title: 'Reports',
-    header: 'Reports',
+    heading: 'Reports',
     reports: reports.all()
   });
 });

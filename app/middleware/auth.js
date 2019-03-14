@@ -25,7 +25,8 @@ passport.use('jwt', new CustomStrategy((req, done) => {
     return done(null, false, {message: 'No JWT'});
 
   tokens.verifyAccessToken(req.cookies.jwt, (err, decoded) => {
-    if (err) { return done(err.message); }
+    if (err) { return done(null, false, {message: err}); }
+    console.log(req.method, req.url);
     return done(null, decoded);
   });
 }));
