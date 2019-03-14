@@ -3,6 +3,7 @@ body
   h1= heading
   table.table.table-striped
     tr
+      th(scope='col') Ticket #
       th(scope='col') User
       th(scope='col') Category
       th(scope='col') Subject
@@ -11,6 +12,7 @@ body
       th
     each report in reports
       tr(class= report.closed ? 'closed' : undefined)
+        td= report.rowid
         td= report.requestedBy
         td= report.category
         td

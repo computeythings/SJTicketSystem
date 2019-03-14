@@ -55,6 +55,11 @@ h1
   margin: 1rem;
 }
 
+tr th:first-child
+{
+    width:1%;
+    white-space:nowrap;
+}
 tr td:last-child
 {
     width:1%;
