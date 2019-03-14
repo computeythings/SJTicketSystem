@@ -8,6 +8,7 @@ body
       th(scope='col') Subject
       th(scope='col') Assigned To
       th(scope='col') Date
+      th
     each report in reports
       tr(class= report.closed ? 'closed' : undefined)
         td= report.requestedBy
@@ -19,5 +20,7 @@ body
             span= report.description
         td= report.assignedTo
         td= reportDate
+        td
+          a(href='/reports/edit/' + report.rowid).fas.fa-edit.edit-user
 
   a.btn.btn-primary(href='/reports/add') Add

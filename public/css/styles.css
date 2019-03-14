@@ -54,3 +54,15 @@ h1
 {
   margin: 1rem;
 }
+
+tr td:last-child
+{
+    width:1%;
+    white-space:nowrap;
+}
+
+.edit-user
+{
+  align-content: right;
+  padding-right: 3rem;
+}

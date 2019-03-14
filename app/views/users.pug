@@ -6,9 +6,12 @@ body
     tr
       th(scope='col') Username
       th(scope='col') Admin
+      th
     each user in users
       tr
         td= user.username
         td= user.admin ? 'Yes' : 'No'
+        td
+          a(href='/users/edit/' + user.rowid).fas.fa-edit.edit-user
 
   a.btn.btn-primary(href='/users/add') Add

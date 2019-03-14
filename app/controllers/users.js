@@ -22,7 +22,7 @@ db.run('CREATE TABLE IF NOT EXISTS users ' +
 exports.all = () => {
   return new Promise((resolve, reject) => {
     var usersList = [];
-    db.each('SELECT username, admin FROM users', (err, row) => {
+    db.each('SELECT ROWID, username, admin FROM users', (err, row) => {
       if (err) { reject(err); }
       usersList.push(row);
     }, err => {

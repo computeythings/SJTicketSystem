@@ -15,7 +15,7 @@ db.run('CREATE TABLE IF NOT EXISTS reports ' +
 exports.all = () => {
   return new Promise((resolve, reject) => {
     var reportsList = [];
-    db.each('SELECT * FROM reports ORDER BY date DESC', (err, row) => {
+    db.each('SELECT ROWID, * FROM reports ORDER BY date DESC', (err, row) => {
       if (err) { reject(err); }
       reportsList.push(row);
     }, err => {
