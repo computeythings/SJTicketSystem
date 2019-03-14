@@ -1,6 +1,6 @@
 include header.pug
 
-body
+body.main
   h2 Add a user:
   form(method='POST' action='/users/add')
     div.form-group
@@ -12,4 +12,7 @@ body
     div.form-group
       label(for='pw_confirm') Confirm Password:
       input#pw_confirm.form-control(type='password' name='password_confirm')
+    div.form-check
+      input#isAdmin.form-check-input(type='checkbox' name='isAdmin')
+      label.form-check-label(for='isAdmin') Admin
     button.btn.btn-primary(type='submit') Add

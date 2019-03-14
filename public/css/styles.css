@@ -1,6 +1,7 @@
 @import url(https://fonts.googleapis.com/css?family=Raleway:300,400,600);
 
-body{
+body
+{
     margin: 0;
     font-size: .9rem;
     font-weight: 400;
@@ -8,6 +9,16 @@ body{
     color: #212529;
     text-align: left;
     background-color: #f5f8fa;
+}
+
+h1
+{
+  padding: 1rem;
+}
+
+.main
+{
+  margin: 1.2rem;
 }
 
 .navbar-brand , .nav-link, .my-form, .login-form
@@ -37,4 +48,9 @@ body{
 {
     margin-left: 0;
     margin-right: 0;
+}
+
+.btn
+{
+  margin: 1rem;
 }
