@@ -19,8 +19,10 @@ exports.all = () => {
       if (err) { reject(err); }
       reportsList.push(row);
     }, err => {
-      if (err) { reject(err); }
-      resolve(reportsList);
+      if (err)
+        reject(err);
+      else
+        resolve(reportsList);
     });
   })
 }
@@ -28,14 +30,28 @@ exports.all = () => {
 exports.allOpen = () => {
   return new Promise((resolve, reject) => {
     var reportsList = [];
-    db.each('SELECT * FROM reports WHERE closed != 1', (err, row) => {
+    db.each('SELECT ROWID, * FROM reports WHERE closed != 1', (err, row) => {
       if (err) { reject(err); }
       reportsList.push(row);
     }, err => {
-      if (err) { reject(err); }
-      resolve(reportsList);
+      if (err)
+        reject(err);
+      else
+        resolve(reportsList);
     });
   })
+}
+
+exports.getReport = id => {
+  return new Promise((resolve, reject) => {
+    db.get('SELECT ROWID, * FROM reports WHERE rowid=?',
+    id, (err, row) => {
+      if (err)
+        reject(err);
+      else
+        resolve(row);
+    });
+  });
 }
 
 exports.addReport = report => {
@@ -53,12 +69,10 @@ exports.addReport = report => {
         $closed: report.closed,
         $date: report.date
       }, function(err) {
-        if(err) {
-          console.error(err);
+        if(err)
           reject(err);
-          return;
-        }
-        resolve(this.lastID);
+        else
+          resolve(this.lastID);
     });
   });
 }
@@ -67,12 +81,14 @@ exports.updateReport = (id, report) => {
   return new Promise((resolve, reject) => {
     db.run(
       'UPDATE reports SET category = $category, ' +
-      'requestedBy = $requestedBy,' +
-      'subject = $subject,' +
-      'description = $description,' +
-      'assignedTo = $assignedTo' +
-      'closed = $closed' +
-      'date = $date', {
+      'requestedBy = $requestedBy, ' +
+      'subject = $subject, ' +
+      'description = $description, ' +
+      'assignedTo = $assignedTo ' +
+      'closed = $closed ' +
+      'date = $date ' +
+      'WHERE rowid=$id', {
+        $id: id,
         $category: report.category,
         $requestedBy: report.requestedBy,
         $subject: report.subject,
@@ -83,7 +99,8 @@ exports.updateReport = (id, report) => {
       }, function(err) {
         if(err)
           reject(err);
-        resolve(this.lastID);
+        else
+          resolve(this.lastID);
       });
   });
 }
@@ -93,7 +110,8 @@ exports.deleteReport = id => {
     db.run('DELETE FROM reports WHERE rowid=?', id, function(err) {
       if (err)
         reject(err);
-      resolve(this.lastID);
+      else
+        resolve(this.lastID);
     });
   });
 }

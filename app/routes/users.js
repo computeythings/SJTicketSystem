@@ -18,10 +18,17 @@ router.post('/users/delete', (req, res) => {
   users.deleteUser(req.user);
 });
 
-/* TODO
-router.post('/users/update', (req, res) => {
+router.post('/users/edit/:user', (req, res) => {
+
 });
-*/
+
+router.get('/users/edit/:user', (req, res) => {
+  users.getUser(req.params.user).then(result => {
+    res.send(result);
+  }).catch(err => {
+    res.status(503).send(err);
+  });
+});
 
 router.get('/users', (req, res) => {
   // delay rendering the page until the database is initialized

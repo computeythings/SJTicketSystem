@@ -35,4 +35,17 @@ router.post('/reports/add', (req, res) => {
   });
 });
 
+router.post('/reports/edit/:reportId', (req, res) => {
+
+});
+
+router.get('/reports/edit/:reportId', (req, res) => {
+  reports.getReport(req.params.reportId).then(result => {
+    res.send(result);
+  }).catch(err => {
+    res.status(503).send(err);
+  });
+});
+
+
 module.exports = router;

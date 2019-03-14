@@ -22,12 +22,14 @@ db.run('CREATE TABLE IF NOT EXISTS users ' +
 exports.all = () => {
   return new Promise((resolve, reject) => {
     var usersList = [];
-    db.each('SELECT ROWID, username, admin FROM users', (err, row) => {
+    db.each('SELECT username, admin FROM users', (err, row) => {
       if (err) { reject(err); }
       usersList.push(row);
     }, err => {
-      if (err) { reject(err); }
-      resolve(usersList);
+      if (err)
+        reject(err);
+      else
+        resolve(usersList);
     });
   })
 }
@@ -75,17 +77,19 @@ exports.login = (username, password) => {
 
 exports.getUser = name => {
   return new Promise((resolve, reject) => {
-    db.each('SELECT username, admin FROM users WHERE username is ? LIMIT 1',
+    db.get('SELECT ROWID, username, admin FROM users WHERE username is ?',
     name, (err, row) => {
-      if (err) { reject(err); }
-      resolve(row);
+      if (err)
+        reject(err);
+      else
+        resolve(row);
     });
   });
 }
 
-exports.deleteUser = name => {
+exports.deleteUser = id => {
   return new Promise((resolve, reject) => {
-    db.run('DELETE FROM users WHERE rowid=?', name, function(err) {
+    db.run('DELETE FROM users WHERE id=?', id, function(err) {
       if (err)
         reject(err);
       else
