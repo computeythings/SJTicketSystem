@@ -20,13 +20,24 @@ passport.use(new LocalStrategy(
   })
 );
 
+// used for each transaction after initial local authentication
 passport.use('jwt', new CustomStrategy((req, done) => {
   if(!req.cookies || !req.cookies.jwt)
     return done(null, false, {message: 'No JWT'});
 
   tokens.verifyAccessToken(req.cookies.jwt, (err, decoded) => {
-    if (err) { return done(null, false, {message: err}); }
-    console.log(req.method, req.url);
+    if (err) { return done(err); }
     return done(null, decoded);
+  });
+}));
+
+// Used to refresh expired access tokens
+passport.use('jwt_refresh', new CustomStrategy((req, done) => {
+  if(!req.cookies || !req.cookies.refresh_jwt)
+    return done(null, false, { message: 'No Refresh Token'} );
+
+  tokens.generateAccessToken(req.cookies.refresh_jwt, (err, signed) => {
+    if (err) { return done(null, false, { message: err }); }
+    return done(null, signed);
   });
 }));
