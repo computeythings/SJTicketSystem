@@ -2,13 +2,13 @@ include header.pug
 body
   h1= heading
 
-  table.reports
+  table.table.table-striped
     tr
-      th User
-      th Category
-      th Subject
-      th Assigned To
-      th Date
+      th(scope='col') User
+      th(scope='col') Category
+      th(scope='col') Subject
+      th(scope='col') Assigned To
+      th(scope='col') Date
     each report in reports
       tr(class= report.closed ? 'closed' : undefined)
         td= report.requestedBy

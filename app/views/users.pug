@@ -2,10 +2,10 @@ include header.pug
 body
   h1= heading
 
-  table.users
+  table.table.table-striped
     tr
-      th Username
-      th Admin
+      th(scope='col') Username
+      th(scope='col') Admin
     each user in users
       tr
         td= user.username
