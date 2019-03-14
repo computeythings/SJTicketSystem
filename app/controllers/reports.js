@@ -5,6 +5,7 @@ const DATABASE = process.env.REPORTS_DATABASE || ':memory:';
 
 var initialized = false;
 const db = new sql.Database(DATABASE);
+console.log('Opening reports database at', DATABASE);
 db.run('CREATE TABLE IF NOT EXISTS reports ' +
 '(category TEXT, requestedBy TEXT, subject TEXT, description TEXT, ' +
 'assignedTo TEXT, closed INTEGER, date INTEGER)', err => {

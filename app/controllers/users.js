@@ -8,6 +8,7 @@ const DATABASE = process.env.USERS_DATABASE || ':memory:';
 
 var initialized = false;
 const db = new sql.Database(DATABASE);
+console.log('Opening users database at', DATABASE);
 db.run('CREATE TABLE IF NOT EXISTS users ' +
   '(username TEXT UNIQUE, password TEXT, admin INTEGER)', function(err) {
     if(!err) {
