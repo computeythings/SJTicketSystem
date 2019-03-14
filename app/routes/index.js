@@ -11,30 +11,31 @@ router.get('*', (req, res, next) => {
   }
   req.session.returnTo = req.url;
   passport.authenticate('jwt', (err, result) => {
-    if (err.name === 'TokenExpiredError') {
-      return;
+    if (err && err.name === 'TokenExpiredError') {
+      passport.authenticate('jwt_refresh', { session: true }, (err, token) => {
+        if (!token)
+          return res.status(301).redirect('/login');
+        else {
+          // a valid jwt has now been issued
+          res.cookie('jwt', token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'PRODUCTION'
+          });
+          // pass user onto desired location
+          return next();
+        }
+      })(req, res, next);
     }
     if (!result)
       return res.status(301).redirect('/login');
-    else {
+    else
       return next();
-    }
   })(req, res, next);
 
-  passport.authenticate('jwt_refresh', { session: true }, (err, token) => {
-    if (!token)
-      return res.status(301).redirect('/login');
-    else {
-      // a valid jwt has now been issued
-      res.cookie('jwt', token, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'PRODUCTION'
-      });
-      // pass user onto desired location
-      return next();
-    }
-  })(req, res, next);
+
 });
+
+
 
 
 /*
