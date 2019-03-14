@@ -6,7 +6,9 @@ if(process.env.NODE_ENV === 'TEST') {
 }
 
 require('./app/middleware/auth.js');
+const fs = require('fs');
 const path = require('path');
+const https = require('https');
 const bodyParser = require('body-parser');
 const express = require('express');
 const session = require('express-session');
@@ -27,7 +29,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(require('cookie-parser')());
 app.use(session({
-  secret:'secret',
+  secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: true
 }));
@@ -36,6 +38,17 @@ app.use(require('./app/routes/login'));
 app.use(require('./app/routes/users'));
 app.use(require('./app/routes/reports'));
 
-app.listen(8000, () => {
-  console.log('Server running on http://localhost:8000/')
-});
+if(process.env.SERVER_CERT && process.env.SERVER_KEY
+  || process.env.NODE_ENV === 'PRODUCTION') {
+    https.createServer({
+      key: fs.readFileSync(process.env.SERVER_KEY),
+      cert: fs.readFileSync(process.env.SERVER_CERT)
+    }, app).listen(8443, () => {
+      console.log('Server running on http://localhost:8443/');
+    });
+  }
+else {
+  app.listen(8000, () => {
+    console.log('Server running on http://localhost:8000/');
+  });
+}
