@@ -10,7 +10,8 @@ router.get('/reports', (req, res) => {
       title: 'Reports',
       heading: 'Reports',
       reports: result,
-      reportDate: dateFormat(result.date, "h:MMtt mm-dd-yyyy")
+      timeFmt: dateFormat(result.date, "h:MMtt"),
+      dateFmt: dateFormat(result.date, "mmm dd, yyyy")
     });
   }).catch(err => {
     res.status(503).send(err);

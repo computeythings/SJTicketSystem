@@ -14,12 +14,16 @@ body
         td= report.requestedBy
         td= report.category
         td
-          div.ticket-info
+          span.ticket-info
             strong= report.subject
             br
-            span= report.description
+            p= report.description
         td= report.assignedTo
-        td= reportDate
+        td
+          span.ticket-date
+            span= timeFmt
+            br
+            span= dateFmt
         td
           a(href='/reports/edit/' + report.rowid).fas.fa-edit.edit-user
 
