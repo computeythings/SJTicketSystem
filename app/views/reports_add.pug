@@ -1,21 +1,21 @@
 include header.pug
 
 body
-h2 Add a Report:
-form(method='POST' action='/reports/add')
-  div.form-group
-    label(for='requestedBy') Requested By:
-    input#requestedBy.form-control(type='text' name='requestedBy')
-  div.form-group
-    label(for='category') Category:
-    input#category.form-control(type='text' name='category')
-  div.form-group
-    label(for='subject') Subject:
-    input#subject.form-control(type='text' name='subject')
-  div.form-group
-    label(for='description') Description:
-    input#description.form-control(type='text' name='description')
-  div.form-group
-    label(for='assignedTo') Assigned To:
-    input#assignedTo.form-control(type='text' name='assignedTo')
-  button.btn.btn-primary(type='submit') Add
+  h2 Add a Report:
+  form(method='POST' action='/reports/add')
+    div.form-group
+      label(for='requestedBy') Requested By:
+      input#requestedBy.form-control(type='text' name='requestedBy')
+    div.form-group
+      label(for='category') Category:
+      input#category.form-control(type='text' name='category')
+    div.form-group
+      label(for='subject') Subject:
+      input#subject.form-control(type='text' name='subject')
+    div.form-group
+      label(for='description') Description:
+      input#description.form-control(type='text' name='description')
+    div.form-group
+      label(for='assignedTo') Assigned To:
+      input#assignedTo.form-control(type='text' name='assignedTo')
+    button.btn.btn-primary(type='submit') Submit
