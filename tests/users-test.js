@@ -1,9 +1,11 @@
 "use strict"
+require('dotenv').config();
+process.env.USERS_DATABASE = ':memory:';
 const assert = require('assert');
-const users = require('../controllers/users.js');
-const User = require('../models/user.js');
+const users = require('../app/controllers/users.js');
+const User = require('../app/models/user.js');
 
-const testUser = new User("testerson", "testPassword");
+const testUser = new User("testerson", "testPassword", false);
 
 
 // Before we start, we want to make sure the database has been initialized
@@ -21,12 +23,15 @@ after(() => {
   users.close();
 });
 
+var userRowID;
 describe('users.js', () => {
   describe('#addUser(user)', () => {
     it('should successfully add a test user', (done) => {
       users.addUser(testUser).then((result) => {
-        if (result)
+        if (result) {
+          userRowID = result;
           done();
+        }
       }).catch(err => {
         done(err);
       });
@@ -41,9 +46,9 @@ describe('users.js', () => {
       })
     });
   });
-  describe('#login(user)', () => {
+  describe('#login(user, password)', () => {
     it('should successfully login the test user', done => {
-      users.login(testUser).then(result => {
+      users.login(testUser.name, testUser.password).then(result => {
         if(result)
           done();
       }).catch(err => {
