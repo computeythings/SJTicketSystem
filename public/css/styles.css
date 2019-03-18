@@ -55,6 +55,9 @@ h1
   margin: 1rem;
 }
 
+/*
+  TABLE STYLES
+*/
 tr th:first-child
 {
     width:1%;
@@ -63,7 +66,19 @@ tr th:first-child
 tr td:last-child
 {
     width:1%;
-    white-space:nowrap;
+    padding-right: 2rem;
+}
+.reportsRow
+{
+  cursor: pointer;
+}
+.closed
+{
+  background-color: #C4C6C8;
+}
+.ticketNoRow
+{
+  text-align: center;
 }
 
 .edit-user

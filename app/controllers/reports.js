@@ -8,7 +8,8 @@ const db = new sql.Database(DATABASE);
 console.log('Opening reports database at', DATABASE);
 db.run('CREATE TABLE IF NOT EXISTS reports ' +
 '(category TEXT, requestedBy TEXT, subject TEXT, description TEXT, ' +
-'assignedTo TEXT, closed INTEGER, date INTEGER)', err => {
+'assignedTo TEXT, closed INTEGER, date INTEGER, dateString TEXT, timeString TEXT)',
+err => {
   if(!err)
     initialized = true;
 });
@@ -59,16 +60,18 @@ exports.addReport = report => {
   return new Promise((resolve, reject) => {
     db.run(
       'INSERT INTO reports (category, requestedBy, subject, description, ' +
-      'assignedTo, closed, date) ' +
+      'assignedTo, closed, date, dateString, timeString) ' +
       'VALUES ($category, $requestedBy, $subject, $description, ' +
-      '$assignedTo, $closed, $date)', {
+      '$assignedTo, $closed, $date, $dateString, $timeString)', {
         $category: report.category,
         $requestedBy: report.requestedBy,
         $subject: report.subject,
         $description: report.description,
         $assignedTo: report.assignedTo,
         $closed: report.closed,
-        $date: report.date
+        $date: report.date,
+        $dateString: report.dateString,
+        $timeString: report.timeString
       }, function(err) {
         if(err)
           reject(err);
@@ -88,6 +91,8 @@ exports.updateReport = (id, report) => {
       'assignedTo = $assignedTo ' +
       'closed = $closed ' +
       'date = $date ' +
+      'dateString = $dateString' +
+      'timeString = $timeString' +
       'WHERE rowid=$id', {
         $id: id,
         $category: report.category,
@@ -96,7 +101,9 @@ exports.updateReport = (id, report) => {
         $description: report.description,
         $assignedTo: report.assignedTo,
         $closed: report.closed,
-        $date: report.date
+        $date: report.date,
+        $dateString: report.dateString,
+        $timeString: report.timeString
       }, function(err) {
         if(err)
           reject(err);

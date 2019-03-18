@@ -1,5 +1,4 @@
 "use strict"
-const dateFormat = require('dateformat');
 const express = require('express');
 const router = express.Router();
 const reports = require('../controllers/reports.js');
@@ -9,9 +8,18 @@ router.get('/reports', (req, res) => {
     res.render('reports', {
       title: 'Reports',
       heading: 'Reports',
-      reports: result,
-      timeFmt: dateFormat(result.date, "h:MMtt"),
-      dateFmt: dateFormat(result.date, "mmm dd, yyyy")
+      reports: result
+    });
+  }).catch(err => {
+    res.status(503).send(err);
+  });
+});
+
+router.get('/reports/:reportId', (req, res) => {
+  reports.getReport(req.params.reportId).then(result => {
+    res.render('report', {
+      title: 'Ticket #' + result.rowid ,
+      report: result
     });
   }).catch(err => {
     res.status(503).send(err);
@@ -22,13 +30,12 @@ router.get('/reports/add', (req, res) => {
   res.render('reports_add', {
     title: 'Add Report',
     heading: 'Add a new report',
-    categories: ['workstation', 'server', 'upgrade', 'research']
+    categories: ['workstation', 'printer', 'server', 'upgrade', 'research']
   });
 });
 
 router.post('/reports/add', (req, res) => {
   var report = req.body;
-  console.log('REPORT RECEIVED', report);
   report.date = Date.now();
   report.closed = 0;
   reports.addReport(report).then(result => {

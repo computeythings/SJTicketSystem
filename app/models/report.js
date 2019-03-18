@@ -1,4 +1,5 @@
 "use strict"
+const dateFormat = require('dateformat');
 
 module.exports = class Report {
   constructor(report) {
@@ -9,5 +10,7 @@ module.exports = class Report {
     this.assignedTo = report.assignedTo;
     this.closed = report.closed;
     this.date = report.date;
+    this.dateString = dateFormat(this.date, "mmm dd, yyyy");
+    this.timeString = dateFormat(this.date, "h:MMtt");
   }
 }
