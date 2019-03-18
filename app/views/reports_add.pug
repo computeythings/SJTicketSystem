@@ -5,17 +5,20 @@ body.main
   form(method='POST' action='/reports/add')
     div.form-group
       label(for='requestedBy') Requested By:
-      input#requestedBy.form-control(type='text' name='requestedBy')
+      input#requestedBy.form-control(type='text' name='requestedBy' required)
     div.form-group
       label(for='category') Category:
-      input#category.form-control(type='text' name='category')
+      select#category.form-control(name='category' required)
+        option(value='') -- Request Type --
+        each categoryItem in categories
+          option=categoryItem
     div.form-group
       label(for='subject') Subject:
-      input#subject.form-control(type='text' name='subject')
+      input#subject.form-control(type='text' name='subject' required)
     div.form-group
       label(for='description') Description:
-      input#description.form-control(type='text' name='description')
+      input#description.form-control(type='text' name='description' required)
     div.form-group
       label(for='assignedTo') Assigned To:
-      input#assignedTo.form-control(type='text' name='assignedTo')
+      input#assignedTo.form-control(type='text' name='assignedTo' required)
     button.btn.btn-primary(type='submit') Submit

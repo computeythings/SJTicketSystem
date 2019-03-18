@@ -21,12 +21,14 @@ router.get('/reports', (req, res) => {
 router.get('/reports/add', (req, res) => {
   res.render('reports_add', {
     title: 'Add Report',
-    heading: 'Add a new report'
+    heading: 'Add a new report',
+    categories: ['workstation', 'server', 'upgrade', 'research']
   });
 });
 
 router.post('/reports/add', (req, res) => {
   var report = req.body;
+  console.log('REPORT RECEIVED', report);
   report.date = Date.now();
   report.closed = 0;
   reports.addReport(report).then(result => {
