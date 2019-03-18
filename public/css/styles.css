@@ -61,11 +61,12 @@ h1
 tr th:first-child
 {
     width:1%;
-    white-space:nowrap;
+    white-space: nowrap;
 }
 tr td:last-child
 {
     width:1%;
+    white-space: nowrap;
     padding-right: 2rem;
 }
 .reportsRow
