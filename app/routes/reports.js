@@ -15,6 +15,14 @@ router.get('/reports', (req, res) => {
   });
 });
 
+router.get('/reports/add', (req, res) => {
+  res.render('reports_add', {
+    title: 'Add Report',
+    heading: 'Add a new report',
+    categories: ['workstation', 'printer', 'server', 'upgrade', 'research']
+  });
+});
+
 router.get('/reports/:reportId', (req, res) => {
   reports.getReport(req.params.reportId).then(result => {
     res.render('report', {
@@ -23,14 +31,6 @@ router.get('/reports/:reportId', (req, res) => {
     });
   }).catch(err => {
     res.status(503).send(err);
-  });
-});
-
-router.get('/reports/add', (req, res) => {
-  res.render('reports_add', {
-    title: 'Add Report',
-    heading: 'Add a new report',
-    categories: ['workstation', 'printer', 'server', 'upgrade', 'research']
   });
 });
 
