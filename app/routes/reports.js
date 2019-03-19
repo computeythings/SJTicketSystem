@@ -20,7 +20,7 @@ router.get('/reports/add', (req, res) => {
   res.render('reports_add', {
     title: 'Add Report',
     heading: 'Add a new report',
-    categories: ['workstation', 'printer', 'server', 'upgrade', 'software', 'research']
+    categories: ['workstation', 'printer', 'server', 'upgrade', 'software', 'purchasing', 'research']
   });
 });
 
