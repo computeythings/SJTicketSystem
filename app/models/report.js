@@ -10,7 +10,6 @@ module.exports = class Report {
     this.assignedTo = report.assignedTo;
     this.closed = report.closed;
     this.date = report.date;
-    console.log('formatting date', this.date);
     this.dateString = dateFormat(this.date, "mmm dd, yyyy");
     this.timeString = dateFormat(this.date, "h:MMtt");
   }

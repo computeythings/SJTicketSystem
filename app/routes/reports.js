@@ -7,8 +7,8 @@ const Report = require('../models/report.js');
 router.get('/reports', (req, res) => {
   reports.all().then(result => {
     res.render('reports', {
-      title: 'Reports',
-      heading: 'Reports',
+      title: 'Tickets',
+      heading: 'Tickets',
       reports: result
     });
   }).catch(err => {
@@ -20,7 +20,7 @@ router.get('/reports/add', (req, res) => {
   res.render('reports_add', {
     title: 'Add Report',
     heading: 'Add a new report',
-    categories: ['workstation', 'printer', 'server', 'upgrade', 'research']
+    categories: ['workstation', 'printer', 'server', 'upgrade', 'software', 'research']
   });
 });
 
