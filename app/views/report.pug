@@ -1,3 +1,19 @@
-main
-  .container
-    .row
+include header.pug
+main.login-form
+  .cotainer
+    .row.justify-content-center
+      .col-md-8
+        .card
+          .card-header= ticket.subject
+          .card-body
+            strong Issue For:
+            span= ' ' + ticket.requestedBy
+            br
+            strong Category:
+            span= ' ' + ticket.category
+            
+            p= ticket.description
+
+            strong Date:
+            span= ' ' + ticket.timeString + ' '
+            span= ticket.dateString || report.date
