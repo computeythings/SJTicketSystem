@@ -1,3 +1,31 @@
-main
-  .container
-    .row
+include header.pug
+main.login-form
+  .cotainer
+    .row.justify-content-center
+      .col-md-8
+        .card
+          .card-header= ticket.subject
+          .card-body
+            strong Issue For:
+            span= ' ' + ticket.requestedBy
+            br
+            strong Category:
+            span= ' ' + ticket.category
+
+            p
+            p= ticket.description
+
+            span= ' ' + ticket.timeString + ' '
+            span= ticket.dateString || report.date
+        .card
+          .card-body
+            h2.card-title Comment
+            form(action='/login' method='POST')
+              if err
+                .form-group.row.alert.alert-danger
+                  strong= err
+              .form-group.row
+                textarea#comment.form-control(type='text' name='comment' rows="8")
+              .form-group.row.justify-content-end
+                  button.btn.btn-primary(type='submit')
+                    | submit

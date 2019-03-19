@@ -18,8 +18,8 @@ router.get('/reports', (req, res) => {
 
 router.get('/reports/add', (req, res) => {
   res.render('reports_add', {
-    title: 'Add Report',
-    heading: 'Add a new report',
+    title: 'Add Ticket',
+    heading: 'Add a new ticket',
     categories: ['workstation', 'printer', 'server', 'upgrade', 'software', 'purchasing', 'research']
   });
 });
@@ -28,7 +28,7 @@ router.get('/reports/:reportId', (req, res) => {
   reports.getReport(req.params.reportId).then(result => {
     res.render('report', {
       title: 'Ticket #' + result.rowid ,
-      report: result
+      ticket: result
     });
   }).catch(err => {
     res.status(503).send(err);
