@@ -29,7 +29,7 @@ exports.verifyRefreshToken = (token, callback, cert=CERT) => {
 // throws Invalid Signature if signature is bad
 exports.verifyAccessToken = (token, callback, cert=CERT) => {
   if(!token)
-    return Error('TokenExistenceError');
+    throw new Error('TokenExistenceError');
   return jwt.verify(token, cert, { iss: ISSUER, aud: ACCESS_AUD },
     callback);
 }
@@ -52,42 +52,22 @@ exports.generateRefreshToken = (user, callback, exp=REFRESH_EXP, key=KEY) => {
 
 exports.generateAccessToken = (refreshToken, callback, exp=ACCESS_EXP,
   key=KEY, cert=CERT) => {
-  if(callback) {
-    return new Promise((resolve, reject) => {
-      this.verifyRefreshToken(refreshToken, (err, decoded) => {
-        if(err) { resolve(err); }
-        resolve(jwt.sign(
-          {
-            iss: ISSUER,
-            sub: decoded.sub,
-            aud: ACCESS_AUD,
-            admin: decoded.admin
-          },
-          key,
-          {
-            algorithm: ALGORITHM,
-            expiresIn: exp
-          }, callback
-        ));
-      }, cert);
-    })
-  } else {
-    try {
-      let decoded = this.verifyRefreshToken(refreshToken, null, cert);
-      return jwt.sign(
+  return new Promise((resolve, reject) => {
+    this.verifyRefreshToken(refreshToken, (err, decoded) => {
+      if(err) { resolve(err); }
+      resolve(jwt.sign(
         {
           iss: ISSUER,
           sub: decoded.sub,
-          aud: ACCESS_AUD
+          aud: ACCESS_AUD,
+          admin: decoded.admin
         },
         key,
         {
           algorithm: ALGORITHM,
           expiresIn: exp
-        }
-      );
-    } catch(err) {
-      throw err;
-    }
-  }
+        }, callback
+      ));
+    }, cert);
+  });
 }

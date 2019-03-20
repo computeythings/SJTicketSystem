@@ -27,7 +27,7 @@ passport.use('jwt', new CustomStrategy((req, done) => {
 
   tokens.verifyAccessToken(req.cookies.jwt, (err, decoded) => {
     if (err) { return done(err); }
-    return done(null, decoded);
+    return done(null, decoded, { message: 'JWT ACCESS' });
   });
 }));
 
@@ -38,6 +38,6 @@ passport.use('jwt_refresh', new CustomStrategy((req, done) => {
 
   tokens.generateAccessToken(req.cookies.refresh_jwt, (err, signed) => {
     if (err) { return done(null, false, { message: err }); }
-    return done(null, signed);
+    return done(null, signed, { message: 'JWT REFRESH' });
   });
 }));
