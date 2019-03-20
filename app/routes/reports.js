@@ -26,9 +26,11 @@ router.get('/reports/add', (req, res) => {
 
 router.get('/reports/:reportId', (req, res) => {
   reports.getReport(req.params.reportId).then(result => {
+    console.log(result);
     res.render('report', {
-      title: 'Ticket #' + result.rowid ,
-      ticket: result
+      title: 'Ticket #' + result.rowid,
+      ticket:  new Report(result),
+      closeOptions: ['fixed', 'wontfix', 'duplicate']
     });
   }).catch(err => {
     res.status(503).send(err);
@@ -42,20 +44,18 @@ router.post('/reports/add', (req, res) => {
   reports.addReport(new Report(report)).then(result => {
     res.status(201).redirect('/reports');
   }).catch(err => {
+    console.error(err);
     res.status(503).send(err);
   });
 });
 
-router.get('/reports/edit/:reportId', (req, res) => {
-  reports.getReport(req.params.reportId).then(result => {
-    res.send(result);
+router.post('/reports/:reportId/update', (req, res) => {
+  reports.updateReport(req.params.reportId, req.body).then(result => {
+    res.status(201).redirect('/reports/' + req.params.reportId);
   }).catch(err => {
+    console.error(err);
     res.status(503).send(err);
   });
-});
-
-router.post('/reports/edit/:reportId', (req, res) => {
-
 });
 
 
