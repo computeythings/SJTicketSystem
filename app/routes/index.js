@@ -9,27 +9,20 @@ router.get('*', (req, res, next) => {
   if(req.url === '/login') {
     return next();
   }
-  req.session.returnTo = req.url;
-  passport.authenticate('jwt', (err, result) => {
-    if (err && err.name === 'TokenExpiredError') {
-      passport.authenticate('jwt_refresh', { session: true }, (err, token) => {
-        if (!token)
-          return res.status(301).redirect('/login');
-        else {
-          // a valid jwt has now been issued
-          res.cookie('jwt', token, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === 'PRODUCTION'
-          });
-          // pass user onto desired location
-          return next();
-        }
-      })(req, res, next);
-    }
-    if (!result)
+
+  passport.authenticate(['jwt', 'jwt_refresh'], (err, result, data) => {
+    if (err || !result) {
+      req.session.returnTo = req.url;
       return res.status(301).redirect('/login');
-    else
-      return next();
+    }
+
+    if(data && data.message && data.message === 'JWT REFRESH') {
+      res.cookie('jwt', result, {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === 'PRODUCTION'
+        });
+    }
+    return next();
   })(req, res, next);
 
 
