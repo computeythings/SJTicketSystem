@@ -22,8 +22,10 @@ passport.use(new LocalStrategy(
 
 // used for each transaction after initial local authentication
 passport.use('jwt', new CustomStrategy((req, done) => {
-  if(!req.cookies || !req.cookies.jwt)
+  if(!req.cookies || !req.cookies.jwt ||
+     Object.entries(req.cookies.jwt).length === 0) {
     return done(null, false, {message: 'No JWT'});
+  }
 
   tokens.verifyAccessToken(req.cookies.jwt, (err, decoded) => {
     if (err) { return done(err); }
