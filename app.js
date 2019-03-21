@@ -1,8 +1,7 @@
 "use strict"
 require('dotenv').config();
 if(process.env.NODE_ENV === 'TEST') {
-  process.env.USERS_DATABASE = ':memory:';
-  process.env.REPORTS_DATABASE = ':memory:';
+  process.env.DATABASE = ':memory:';
 }
 
 require('./app/middleware/auth.js');
@@ -14,12 +13,6 @@ const express = require('express');
 const session = require('express-session');
 const favicon = require('serve-favicon');
 const app = express();
-
-if(process.env.NODE_ENV === 'TEST') {
-  process.env.USERS_DATABASE = ':memory:';
-  process.env.REPORTS_DATABASE = ':memory:';
-}
-
 
 app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'app/views'));

@@ -4,7 +4,7 @@ const sql = require('sqlite3');
 const bcrypt = require('bcrypt');
 const User = require('../models/user');
 const SALT_ROUNDS = 10;
-const DATABASE = process.env.USERS_DATABASE || ':memory:';
+const DATABASE = process.env.DATABASE || ':memory:';
 
 var initialized = false;
 const db = new sql.Database(DATABASE);

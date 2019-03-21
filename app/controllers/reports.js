@@ -1,7 +1,7 @@
 "use strict"
 require('dotenv').config();
 const sql = require('sqlite3');
-const DATABASE = process.env.REPORTS_DATABASE || ':memory:';
+const DATABASE = process.env.DATABASE || ':memory:';
 const Report = require('../models/report.js');
 
 var initialized = false;
