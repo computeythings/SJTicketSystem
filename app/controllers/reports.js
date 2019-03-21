@@ -9,8 +9,7 @@ const db = new sql.Database(DATABASE);
 console.log('Opening reports database at', DATABASE);
 db.run('CREATE TABLE IF NOT EXISTS reports ' +
 '(category TEXT, requestedBy TEXT, subject TEXT, description TEXT, ' +
-'assignedTo TEXT, closed INTEGER, date INTEGER, dateString TEXT, ' +
-'timeString TEXT, comments TEXT DEFAULT \'\')',
+'assignedTo TEXT, closed INTEGER, date INTEGER, comments TEXT DEFAULT \'\')',
 err => {
   if(!err)
     initialized = true;
@@ -64,16 +63,14 @@ exports.addReport = report => {
       'INSERT INTO reports (category, requestedBy, subject, description, ' +
       'assignedTo, closed, date, dateString, timeString, comments) ' +
       'VALUES ($category, $requestedBy, $subject, $description, ' +
-      '$assignedTo, $closed, $date, $dateString, $timeString, $comments)', {
+      '$assignedTo, $closed, $date, $comments)', {
         $category: report.category,
         $requestedBy: report.requestedBy,
         $subject: report.subject,
         $description: report.description,
         $assignedTo: report.assignedTo,
         $closed: report.closed,
-        $date: report.date,
-        $dateString: report.dateString,
-        $timeString: report.timeString,
+        $date: report.date
         $comments: report.comments
       }, function(err) {
         if(err)
@@ -86,7 +83,6 @@ exports.addReport = report => {
 
 exports.updateReport = (id, values) => {
   return new Promise((resolve, reject) => {
-    console.log('EDITTING REPORT', id);
     exports.getReport(id).then(result => {
       let report = new Report(result);
       for(const key in values) {
@@ -103,7 +99,6 @@ exports.updateReport = (id, values) => {
             report[key] = values[key];
         }
       }
-      console.log('final report', report);
       db.run(
         'UPDATE reports SET category = $category, ' +
         'requestedBy = $requestedBy, ' +
@@ -112,8 +107,6 @@ exports.updateReport = (id, values) => {
         'assignedTo = $assignedTo, ' +
         'closed = $closed, ' +
         'date = $date, ' +
-        'dateString = $dateString, ' +
-        'timeString = $timeString, ' +
         'comments = $comments ' +
         'WHERE rowid=$id', {
           $id: id,
@@ -124,8 +117,6 @@ exports.updateReport = (id, values) => {
           $assignedTo: report.assignedTo,
           $closed: report.closed,
           $date: report.date,
-          $dateString: report.dateString,
-          $timeString: report.timeString,
           $comments: JSON.stringify(report.comments)
         }, function(err) {
           if(err)
