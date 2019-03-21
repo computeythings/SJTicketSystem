@@ -1,0 +1,10 @@
+include header.pug
+include header.pug
+main.login-form
+  .cotainer
+    .row.justify-content-center
+      .col-md-8
+        .card
+          .card-header= user.username
+          .card-body
+            h3= user.admin ? 'ADMIN' : 'NOT ADMIN'

@@ -18,15 +18,22 @@ router.post('/users/delete', (req, res) => {
   users.deleteUser(req.user);
 });
 
-router.post('/users/:user', (req, res) => {
-  
-});
-
 router.get('/users/add', (req, res) => {
   res.render('users_add', {
     title: 'Add User',
     heading: 'Add a new user'
   });
+});
+
+router.get('/users/:user', (req, res) => {
+  users.getUser(req.params.user).then(result => {
+    res.render('user', {
+      user: result
+    });
+  }).catch(err => {
+    console.error(err);
+    res.status(404).send('User not found');
+  })
 });
 
 router.get('/users/:user', (req, res) => {
