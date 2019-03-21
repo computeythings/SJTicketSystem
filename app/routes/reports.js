@@ -26,7 +26,6 @@ router.get('/reports/add', (req, res) => {
 
 router.get('/reports/:reportId', (req, res) => {
   reports.getReport(req.params.reportId).then(result => {
-    console.log(result);
     res.render('report', {
       title: 'Ticket #' + result.rowid,
       ticket:  new Report(result),
