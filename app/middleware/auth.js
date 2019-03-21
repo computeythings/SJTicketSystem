@@ -33,6 +33,19 @@ passport.use('jwt', new CustomStrategy((req, done) => {
   });
 }));
 
+// used for each transaction after initial local authentication
+passport.use('jwt_admin', new CustomStrategy((req, done) => {
+  if(!req.cookies || !req.cookies.jwt ||
+     Object.entries(req.cookies.jwt).length === 0) {
+    return done(null, false, {message: 'No JWT'});
+  }
+
+  tokens.verifyAdminToken(req.cookies.jwt, (err, decoded) => {
+    if (err) { return done(null, false, { message: err.message }); }
+    return done(null, decoded, { message: 'JWT ADMIN' });
+  });
+}));
+
 // Used to refresh expired access tokens
 passport.use('jwt_refresh', new CustomStrategy((req, done) => {
   if(!req.cookies || !req.cookies.refresh_jwt)

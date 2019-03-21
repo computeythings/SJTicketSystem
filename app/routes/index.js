@@ -24,8 +24,6 @@ router.get('*', (req, res, next) => {
     }
     return next();
   })(req, res, next);
-
-
 });
 
 
@@ -45,9 +43,8 @@ router.post('*', (req, res, next) => {
   if(req.url === '/login') {
     return next();
   }
-  passport.authenticate('jwt', {
-    session: false,
-    failureRedirect: '/login'
+  passport.authenticate('jwt_admin', {
+    session: false
   })(req, res, next);
 });
 

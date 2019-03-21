@@ -18,11 +18,18 @@ router.post('/users/delete', (req, res) => {
   users.deleteUser(req.user);
 });
 
-router.post('/users/edit/:user', (req, res) => {
-
+router.post('/users/:user', (req, res) => {
+  
 });
 
-router.get('/users/edit/:user', (req, res) => {
+router.get('/users/add', (req, res) => {
+  res.render('users_add', {
+    title: 'Add User',
+    heading: 'Add a new user'
+  });
+});
+
+router.get('/users/:user', (req, res) => {
   users.getUser(req.params.user).then(result => {
     res.send(result);
   }).catch(err => {
@@ -51,13 +58,6 @@ router.get('/users', (req, res) => {
       res.status(503).send('ERROR 503: DATABASE NOT YET INITIALIZED');
     }
   })(0);
-});
-
-router.get('/users/add', (req, res) => {
-  res.render('users_add', {
-    title: 'Add User',
-    heading: 'Add a new user'
-  });
 });
 
 module.exports = router;

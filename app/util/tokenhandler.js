@@ -34,13 +34,24 @@ exports.verifyAccessToken = (token, callback, cert=CERT) => {
     callback);
 }
 
+exports.verifyAdminToken = (token, callback, cert=CERT) => {
+  if(!token)
+    throw new Error('TokenExistenceError');
+  return jwt.verify(token, cert, { iss: ISSUER, aud: ACCESS_AUD},
+    (err, decoded) => {
+      if (!decoded.admin)
+        return callback(new Error('ACCESS DENIED'));
+      callback(err, decoded);
+    });
+}
+
 exports.generateRefreshToken = (user, callback, exp=REFRESH_EXP, key=KEY) => {
   return jwt.sign(
     {
       iss: ISSUER,
-      sub: user.name,
+      sub: user.username,
       aud: REFRESH_AUD,
-      admin: user.isAdmin
+      admin: user.admin
     },
     key,
     {
