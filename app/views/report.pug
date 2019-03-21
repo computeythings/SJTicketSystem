@@ -31,8 +31,8 @@ main.login-form
               .form-group.row
                 textarea#comment.form-control(type='text' name='comments' rows="8")
               .form-group
-                label(for='closed') Close Ticket:
-                select#closed.form-control(name='closed')
+                label(for='type') Close Ticket:
+                select#type.form-control(name='type')
                   option(value='update') -- Comment Type --
                   each close in closeOptions
                     option= close

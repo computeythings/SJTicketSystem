@@ -70,7 +70,7 @@ exports.addReport = report => {
         $description: report.description,
         $assignedTo: report.assignedTo,
         $closed: report.closed,
-        $date: report.date
+        $date: report.date,
         $comments: report.comments
       }, function(err) {
         if(err)

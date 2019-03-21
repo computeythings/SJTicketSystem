@@ -30,7 +30,6 @@ router.get('*', (req, res, next) => {
 });
 // restrict access
 RESTRICTED_ROUTES.forEach((route) => {
-  console.log('setting route for', route);
   router.get(route, (req, res, next) => {
     passport.authenticate('jwt_admin', (err, result, data) => {
       if (err || ! result)
@@ -46,9 +45,11 @@ router.post('*', (req, res, next) => {
   if(req.url === '/login') {
     return next();
   }
-  
-  passport.authenticate('jwt_admin', {
-    session: false
+
+  passport.authenticate('jwt_admin', (err, result, data) => {
+    if (err || !result)
+      return res.status(401).send('You do not have permission to modify this.');
+    req.user = result.sub;
   })(req, res, next);
 });
 
