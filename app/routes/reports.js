@@ -26,8 +26,8 @@ router.get('/reports/add', (req, res) => {
   });
 });
 
-router.get('/reports/:reportId', (req, res) => {
-  reports.getReport(req.params.reportId).then(async result => {
+router.get('/reports/:reportID', (req, res) => {
+  reports.getReport(req.params.reportID).then(async result => {
     res.render('report', {
       title: 'Ticket #' + result.rowid,
       ticket:  new Report(result),
@@ -51,18 +51,18 @@ router.post('/reports/add', (req, res) => {
   });
 });
 
-router.post('/reports/:reportId/update', (req, res) => {
-  reports.updateReport(req.params.reportId, req.body).then(result => {
-    res.status(201).redirect('/reports/' + req.params.reportId);
+router.post('/reports/:reportID/update', (req, res) => {
+  reports.updateReport(req.params.reportID, req.body).then(result => {
+    res.status(201).redirect('/reports/' + req.params.reportID);
   }).catch(err => {
     console.error(err);
     res.status(503).send(err);
   });
 });
 
-router.post('/reports/:reportId/comment', (req, res) => {
+router.post('/reports/:reportID/comment', (req, res) => {
   let comment = new Comment({
-    ticketID: req.params.reportId,
+    ticketID: req.params.reportID,
     owner: req.user,
     comment: req.body.comment,
     type: req.body.type,
@@ -70,7 +70,7 @@ router.post('/reports/:reportId/comment', (req, res) => {
   });
 
   comments.addComment(comment).then(result => {
-    res.status(201).redirect('/reports/' + req.params.reportId);
+    res.status(201).redirect('/reports/' + req.params.reportID);
   }).catch(err => {
     console.error(err);
     res.status(503).send(err);

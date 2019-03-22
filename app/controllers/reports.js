@@ -9,7 +9,7 @@ const db = new sql.Database(DATABASE);
 console.log('Opening reports database at', DATABASE);
 db.run('CREATE TABLE IF NOT EXISTS reports ' +
 '(category TEXT, requestedBy TEXT, subject TEXT, description TEXT, ' +
-'assignedTo TEXT, closed INTEGER, date INTEGER, comments TEXT DEFAULT \'\')',
+'assignedTo TEXT, closed INTEGER, date INTEGER)',
 err => {
   if(!err)
     initialized = true;
@@ -61,17 +61,16 @@ exports.addReport = report => {
   return new Promise((resolve, reject) => {
     db.run(
       'INSERT INTO reports (category, requestedBy, subject, description, ' +
-      'assignedTo, closed, date, comments) ' +
+      'assignedTo, closed, date) ' +
       'VALUES ($category, $requestedBy, $subject, $description, ' +
-      '$assignedTo, $closed, $date, $comments)', {
+      '$assignedTo, $closed, $date)', {
         $category: report.category,
         $requestedBy: report.requestedBy,
         $subject: report.subject,
         $description: report.description,
         $assignedTo: report.assignedTo,
         $closed: report.closed,
-        $date: report.date,
-        $comments: report.comments
+        $date: report.date
       }, function(err) {
         if(err)
           reject(err);
@@ -89,9 +88,6 @@ exports.updateReport = (id, values) => {
         switch(key) {
           case 'rowid':
             continue;
-          case 'comments':
-            report.addComment(values[key]);
-            break;
           case 'closed':
             report[key] = values[key] === 'update' ? 0 : 1;
             break;
@@ -107,7 +103,6 @@ exports.updateReport = (id, values) => {
         'assignedTo = $assignedTo, ' +
         'closed = $closed, ' +
         'date = $date, ' +
-        'comments = $comments ' +
         'WHERE rowid=$id', {
           $id: id,
           $category: report.category,
@@ -116,8 +111,7 @@ exports.updateReport = (id, values) => {
           $description: report.description,
           $assignedTo: report.assignedTo,
           $closed: report.closed,
-          $date: report.date,
-          $comments: JSON.stringify(report.comments)
+          $date: report.date
         }, function(err) {
           if(err)
             reject(err);
