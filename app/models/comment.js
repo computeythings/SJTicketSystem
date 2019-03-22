@@ -1,7 +1,7 @@
 "use strict"
 const dateFormat = require('dateformat');
 
-module.exports = class Report {
+module.exports = class Comment {
   constructor(comment) {
     this.ticketID = comment.ticketID;
     this.owner = comment.owner;

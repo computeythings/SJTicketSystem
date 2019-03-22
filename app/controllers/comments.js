@@ -2,6 +2,7 @@
 require('dotenv').config();
 const sql = require('sqlite3');
 const DATABASE = process.env.DATABASE || ':memory:';
+const Comment = require('../models/comment.js');
 
 var initialized = false;
 const db = new sql.Database(DATABASE);
@@ -18,9 +19,9 @@ exports.forTicket = ticketID => {
   return new Promise((resolve, reject) => {
     var commentList = [];
     db.each('SELECT ROWID, * FROM comments ' +
-    'WHERE ticketID = ? ORDER BY date DESC', ticketID, (err, row) => {
+    'WHERE ticketID = ? ORDER BY date ASC', ticketID, (err, row) => {
       if (err) { reject(err); }
-      commentList.push(row);
+      commentList.push(new Comment(row));
     }, err => {
       if (err)
         reject(err);
@@ -37,7 +38,7 @@ exports.getComment = id => {
       if (err)
         reject(err);
       else
-        resolve(row);
+        resolve(new Comment(row));
     });
   });
 }
@@ -45,13 +46,13 @@ exports.getComment = id => {
 exports.addComment = comment => {
   return new Promise((resolve, reject) => {
     db.run(
-      'INSERT INTO reports (ticketID, owner, comment, type, date) ' +
+      'INSERT INTO comments (ticketID, owner, comment, type, date) ' +
       'VALUES ($ticketID, $owner, $comment, $type, $date)', {
-        $ticketID: ticketID,
-        $owner: owner,
-        $comment: comment,
-        $type: type,
-        $date: date
+        $ticketID: comment.ticketID,
+        $owner: comment.owner,
+        $comment: comment.comment,
+        $type: comment.type,
+        $date: comment.date
       }, function(err) {
         if(err)
           reject(err);

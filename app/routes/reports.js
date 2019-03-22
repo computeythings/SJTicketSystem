@@ -4,6 +4,7 @@ const router = express.Router();
 const reports = require('../controllers/reports.js');
 const comments = require('../controllers/comments.js');
 const Report = require('../models/report.js');
+const Comment = require('../models/comment.js');
 
 router.get('/reports', (req, res) => {
   reports.all().then(result => {
@@ -26,11 +27,11 @@ router.get('/reports/add', (req, res) => {
 });
 
 router.get('/reports/:reportId', (req, res) => {
-  reports.getReport(req.params.reportId).then(result => {
+  reports.getReport(req.params.reportId).then(async result => {
     res.render('report', {
       title: 'Ticket #' + result.rowid,
       ticket:  new Report(result),
-      comments: comments.forTicket(result.rowid),
+      comments: await comments.forTicket(result.rowid),
       closeOptions: ['fixed', 'wontfix', 'duplicate']
     });
   }).catch(err => {
@@ -60,12 +61,15 @@ router.post('/reports/:reportId/update', (req, res) => {
 });
 
 router.post('/reports/:reportId/comment', (req, res) => {
-  let comment = req.body.comment;
-  let type = req.body.type;
-  let date = Date.now();
-  let owner = req.user;
+  let comment = new Comment({
+    ticketID: req.params.reportId,
+    owner: req.user,
+    comment: req.body.comment,
+    type: req.body.type,
+    date: Date.now()
+  });
 
-  reports.updateReport(req.params.reportId, req.body).then(result => {
+  comments.addComment(comment).then(result => {
     res.status(201).redirect('/reports/' + req.params.reportId);
   }).catch(err => {
     console.error(err);

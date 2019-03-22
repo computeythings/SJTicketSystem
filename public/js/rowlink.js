@@ -1,5 +1,5 @@
 jQuery(document).ready(function($) {
-    $(".reportsRow").click(function() {
+    $(".reports-row").click(function() {
         window.location = $(this).data("href");
     });
 });

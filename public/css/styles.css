@@ -69,13 +69,17 @@ tr td:last-child
     white-space: nowrap;
     padding-right: 2rem;
 }
-.reportsRow
+.reports-row
 {
   cursor: pointer;
 }
 .closed
 {
   background-color: #C4C6C8;
+}
+.closed-status
+{
+  color: #ff3333;
 }
 .ticketNoRow
 {

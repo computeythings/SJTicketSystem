@@ -20,7 +20,7 @@ exports.all = () => {
     var reportsList = [];
     db.each('SELECT ROWID, * FROM reports ORDER BY date DESC', (err, row) => {
       if (err) { reject(err); }
-      reportsList.push(row);
+      reportsList.push(new Report(row));
     }, err => {
       if (err)
         reject(err);
@@ -35,7 +35,7 @@ exports.allOpen = () => {
     var reportsList = [];
     db.each('SELECT ROWID, * FROM reports WHERE closed != 1', (err, row) => {
       if (err) { reject(err); }
-      reportsList.push(row);
+      reportsList.push(new Report(row));
     }, err => {
       if (err)
         reject(err);
@@ -61,7 +61,7 @@ exports.addReport = report => {
   return new Promise((resolve, reject) => {
     db.run(
       'INSERT INTO reports (category, requestedBy, subject, description, ' +
-      'assignedTo, closed, date, dateString, timeString, comments) ' +
+      'assignedTo, closed, date, comments) ' +
       'VALUES ($category, $requestedBy, $subject, $description, ' +
       '$assignedTo, $closed, $date, $comments)', {
         $category: report.category,

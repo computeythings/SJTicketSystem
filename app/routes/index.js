@@ -33,7 +33,8 @@ RESTRICTED_ROUTES.forEach((route) => {
   router.get(route, (req, res, next) => {
     passport.authenticate('jwt_admin', (err, result, data) => {
       if (err || ! result)
-        return res.status(401).send('You do not have permission to access this.');
+        return res.status(401).send('You dont have permission to access this.');
+      req.user = result.sub;
       return next();
     })(req, res, next);
   });
@@ -50,6 +51,7 @@ router.post('*', (req, res, next) => {
     if (err || !result)
       return res.status(401).send('You do not have permission to modify this.');
     req.user = result.sub;
+    return next();
   })(req, res, next);
 });
 

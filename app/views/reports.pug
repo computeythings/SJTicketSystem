@@ -12,8 +12,8 @@ body
       th(scope='col') Date
     each report in reports
       tr(class= report.closed ? 'closed' : undefined
-      data-href='/reports/' + report.rowid).reportsRow
-        td.ticketNoRow= report.rowid
+      data-href='/reports/' + report.id).reports-row
+        td.ticketNoRow= report.id
         td.userRow= report.requestedBy
         td.categoryRow= report.category
         td.subjectRow
@@ -26,6 +26,6 @@ body
           span.ticket-date
             span= report.timeString
             br
-            span= report.dateString || report.date
+            span= report.dateString
 
   a.btn.btn-primary(href='/reports/add') Add
