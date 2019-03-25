@@ -28,7 +28,8 @@ router.post('/login', (req, res) => {
 
       res.cookie('refresh_jwt', refresh, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === 'PRODUCTION'
+        secure: process.env.NODE_ENV === 'PRODUCTION',
+        expires: new Date(Date.now() + 60*60*24*30)
       });
       res.cookie('jwt', access, {
         httpOnly: true,
