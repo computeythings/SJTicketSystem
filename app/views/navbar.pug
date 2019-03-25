@@ -1,0 +1,12 @@
+nav.navbar.navbar-expand-lg.navbar-dark.bg-primary.shadow-sm
+  a.navbar-brand(href='/') IT Ticketing
+  #navbarSupportedContent.collapse.navbar-collapse
+    ul.navbar-nav.mr-auto
+    if auth
+      ul.navbar-nav
+        li.nav-item
+          a.nav-link(href='#') Logout
+    else
+      ul.navbar-nav
+        li.nav-item
+          a.nav-link(href='/login') Login

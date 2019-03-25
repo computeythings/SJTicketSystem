@@ -28,4 +28,5 @@ body
             br
             span= report.dateString
 
-  a.btn.btn-primary(href='/reports/add') Add
+  if admin
+    a.btn.btn-primary(href='/reports/add') Add

@@ -9,6 +9,8 @@ const Comment = require('../models/comment.js');
 router.get('/reports', (req, res) => {
   reports.all().then(result => {
     res.render('reports', {
+      auth: req.user,
+      admin: req.admin,
       title: 'Tickets',
       heading: 'Tickets',
       reports: result
@@ -20,6 +22,7 @@ router.get('/reports', (req, res) => {
 
 router.get('/reports/add', (req, res) => {
   res.render('reports_add', {
+    auth: req.user,
     title: 'Add Ticket',
     heading: 'Add a new ticket',
     categories: ['workstation', 'printer/scanner', 'server', 'upgrade', 'software', 'purchasing', 'research']
@@ -29,6 +32,7 @@ router.get('/reports/add', (req, res) => {
 router.get('/reports/:reportID', (req, res) => {
   reports.getReport(req.params.reportID).then(async result => {
     res.render('report', {
+      auth: req.user,
       title: 'Ticket #' + result.rowid,
       ticket:  new Report(result),
       comments: await comments.forTicket(result.rowid),

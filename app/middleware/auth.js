@@ -29,6 +29,8 @@ passport.use('jwt', new CustomStrategy((req, done) => {
 
   tokens.verifyAccessToken(req.cookies.jwt, (err, decoded) => {
     if (err) { return done(err); }
+    req.user = decoded.sub;
+    req.admin = decoded.admin;
     return done(null, decoded, { message: 'JWT ACCESS' });
   });
 }));
@@ -42,6 +44,8 @@ passport.use('jwt_admin', new CustomStrategy((req, done) => {
 
   tokens.verifyAdminToken(req.cookies.jwt, (err, decoded) => {
     if (err) { return done(null, false, { message: err.message }); }
+    req.user = decoded.sub;
+    req.admin = true;
     return done(null, decoded, { message: 'JWT ADMIN' });
   });
 }));
