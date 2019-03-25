@@ -15,12 +15,12 @@ router.post('/users/add', (req, res) => {
 });
 
 router.post('/users/delete', (req, res) => {
-  users.deleteUser(req.user);
+  users.deleteUser(req.session.user);
 });
 
 router.get('/users/add', (req, res) => {
   res.render('users_add', {
-    auth: req.user,
+    auth: req.session.user,
     title: 'Add User',
     heading: 'Add a new user'
   });
@@ -29,7 +29,7 @@ router.get('/users/add', (req, res) => {
 router.get('/users/:user', (req, res) => {
   users.getUser(req.params.user).then(result => {
     res.render('user', {
-      auth: req.user,
+      auth: req.session.user,
       user: result
     });
   }).catch(err => {
@@ -52,7 +52,7 @@ router.get('/users', (req, res) => {
     if(users.initialized()) {
       users.all().then(result => {
         res.render('users', {
-          auth: req.user,
+          auth: req.session.user,
           title: 'IT Reporting - Users',
           heading: 'Users',
           users: result

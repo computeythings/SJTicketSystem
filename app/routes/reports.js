@@ -9,8 +9,8 @@ const Comment = require('../models/comment.js');
 router.get('/reports', (req, res) => {
   reports.all().then(result => {
     res.render('reports', {
-      auth: req.user,
-      admin: req.admin,
+      auth: req.session.user,
+      admin: req.session.admin,
       title: 'Tickets',
       heading: 'Tickets',
       reports: result
@@ -22,7 +22,7 @@ router.get('/reports', (req, res) => {
 
 router.get('/reports/add', (req, res) => {
   res.render('reports_add', {
-    auth: req.user,
+    auth: req.session.user,
     title: 'Add Ticket',
     heading: 'Add a new ticket',
     categories: ['workstation', 'printer/scanner', 'server', 'upgrade', 'software', 'purchasing', 'research']
@@ -32,7 +32,7 @@ router.get('/reports/add', (req, res) => {
 router.get('/reports/:reportID', (req, res) => {
   reports.getReport(req.params.reportID).then(async result => {
     res.render('report', {
-      auth: req.user,
+      auth: req.session.user,
       title: 'Ticket #' + result.rowid,
       ticket:  new Report(result),
       comments: await comments.forTicket(result.rowid),
@@ -67,7 +67,7 @@ router.post('/reports/:reportID/update', (req, res) => {
 router.post('/reports/:reportID/comment', (req, res) => {
   let comment = new Comment({
     ticketID: req.params.reportID,
-    owner: req.user,
+    owner: req.session.user,
     comment: req.body.comment,
     type: req.body.type,
     date: Date.now()

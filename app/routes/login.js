@@ -34,16 +34,29 @@ router.post('/login', (req, res) => {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'PRODUCTION'
       });
+      req.session.user = user.username;
+      req.session.admin = user.admin;
       res.status(301).redirect(req.session.returnTo || '/');
+      delete req.session.returnTo;
     });
   })(req, res);
 });
 
 router.get('/login', (req, res) => {
+
   res.render('login', {
-    title: 'IT Reporting - Login',
-    header: 'IT Reporting'
+    title: 'IT Ticketing - Login',
+    header: 'IT Ticketing'
   });
 });
+
+router.get('/logout', (req, res) => {
+  res.clearCookie('jwt');
+  res.clearCookie('refresh_jwt');
+  delete req.session.returnTo;
+  delete req.session.admin;
+  delete req.session.user;
+  res.status(301).redirect('/');
+})
 
 module.exports = router;
