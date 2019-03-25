@@ -69,7 +69,10 @@ router.post('/reports/:reportID/comment', (req, res) => {
     date: Date.now()
   });
 
-  comments.addComment(comment).then(result => {
+  comments.addComment(comment).then(async result => {
+    if(comment.type !== 'update') {
+      await reports.closeTicket(comment.ticketID);
+    }
     res.status(201).redirect('/reports/' + req.params.reportID);
   }).catch(err => {
     console.error(err);

@@ -80,46 +80,40 @@ exports.addReport = report => {
   });
 }
 
-exports.updateReport = (id, values) => {
+exports.updateReport = (id, set) => {
   return new Promise((resolve, reject) => {
+    var sqlString = 'UPDATE reports SET ';
+    var values = [];
     exports.getReport(id).then(result => {
-      let report = new Report(result);
-      for(const key in values) {
-        switch(key) {
-          case 'rowid':
-            continue;
-          case 'closed':
-            report[key] = values[key] === 'update' ? 0 : 1;
-            break;
-          default:
-            report[key] = values[key];
-        }
+      for(const key in set) {
+        if(key === 'rowid')
+          continue;
+        sqlString += key + ' = ? ';
+        values.push(values[key]);
       }
-      db.run(
-        'UPDATE reports SET category = $category, ' +
-        'requestedBy = $requestedBy, ' +
-        'subject = $subject, ' +
-        'description = $description, ' +
-        'assignedTo = $assignedTo, ' +
-        'closed = $closed, ' +
-        'date = $date, ' +
-        'WHERE rowid=$id', {
-          $id: id,
-          $category: report.category,
-          $requestedBy: report.requestedBy,
-          $subject: report.subject,
-          $description: report.description,
-          $assignedTo: report.assignedTo,
-          $closed: report.closed,
-          $date: report.date
-        }, function(err) {
-          if(err)
-            reject(err);
-          else
-            resolve(this.lastID);
-        });
+
+      sqlString += 'WHERE rowid = ?';
+      values.push(id);
+
+      db.run(sqlString, values, function(err) {
+        if(err)
+          reject(err);
+        else
+          resolve(this.lastID);
+      });
     }).catch(err => {
       reject(err);
+    });
+  });
+}
+
+exports.closeTicket = id => {
+  return new Promise((resolve, reject) => {
+    db.run('UPDATE reports SET closed = 1 WHERE rowid = ?', id, function(err) {
+      if(err)
+        reject(err);
+      else
+        resolve(this.lastID);
     });
   });
 }
