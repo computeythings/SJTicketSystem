@@ -10,7 +10,8 @@ var initialized = false;
 const db = new sql.Database(DATABASE);
 console.log('Opening users database at', DATABASE);
 db.run('CREATE TABLE IF NOT EXISTS users ' +
-  '(username TEXT UNIQUE, password TEXT, admin INTEGER)', function(err) {
+  '(username TEXT, password TEXT, admin INTEGER, ' +
+  'UNIQUE (username COLLATE NOCASE))', function(err) {
     if(!err) {
       exports.all().then((res) => {
         if(res.length === 0)
@@ -58,7 +59,7 @@ exports.addUser = user => {
 
 exports.login = (username, password) => {
   return new Promise((resolve, reject) => {
-    db.get('SELECT * FROM users WHERE username is ?', username,
+    db.get('SELECT * FROM users WHERE username IS ? COLLATE NOCASE', username,
     (err, row) => {
       if (err || !row)
         reject(err ? err : 'The username entered does not exist.');
