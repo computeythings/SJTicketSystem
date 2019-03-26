@@ -69,7 +69,7 @@ router.post('/reports/:reportID/comment', (req, res) => {
     ticketID: req.params.reportID,
     owner: req.session.user,
     comment: req.body.comment,
-    type: req.body.type,
+    type: req.body.closeTicket === 'on' ? req.body.type : 'update',
     date: Date.now()
   });
 

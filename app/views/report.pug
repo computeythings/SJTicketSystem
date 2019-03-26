@@ -1,4 +1,5 @@
 include header.pug
+script(src='/js/closeTicket.js')
 main.login-form
   .cotainer
     .row.justify-content-center
@@ -32,10 +33,11 @@ main.login-form
                   strong= err
               .form-group.row
                 textarea#comment.form-control(type='text' name='comment' rows="8")
+              .form-check
+                input#closeTicket.form-check-input(type='checkbox' name='closeTicket')
+                label.form-check-label(for='closeTicket') Close Ticket
               .form-group
-                label(for='type') Close Ticket:
-                select#type.form-control(name='type')
-                  option(value='update') -- Comment Type --
+                select#type.form-control(name='type' style='display:none')
                   each close in closeOptions
                     option= close
               .form-group.row.justify-content-end
