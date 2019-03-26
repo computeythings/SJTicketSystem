@@ -14,8 +14,19 @@ router.post('/users/add', (req, res) => {
   });
 });
 
-router.post('/users/delete', (req, res) => {
-  users.deleteUser(req.session.user);
+router.post('/users/:userID/delete', (req, res) => {
+  // prevent deletion of currently logged in user
+  users.getUser(req.session.user).then(row => {
+    if(row.rowid === req.params.userID);
+      return res.status(503).send('You cannot delete your own user!');
+  });
+
+  users.deleteUser(req.params.userID).then(result => {
+    res.status(301).redirect('/users');
+  }).catch(err => {
+    console.log('Failed to delete user', err);
+    res.status(503).redirect(req.url);
+  });
 });
 
 router.get('/users/add', (req, res) => {
@@ -53,7 +64,7 @@ router.get('/users', (req, res) => {
       users.all().then(result => {
         res.render('users', {
           auth: req.session.user,
-          title: 'IT Reporting - Users',
+          title: 'IT Ticketing - Users',
           heading: 'Users',
           users: result
         });

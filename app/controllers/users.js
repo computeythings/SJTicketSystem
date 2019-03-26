@@ -91,7 +91,7 @@ exports.getUser = name => {
 
 exports.deleteUser = id => {
   return new Promise((resolve, reject) => {
-    db.run('DELETE FROM users WHERE id=?', id, function(err) {
+    db.run('DELETE FROM users WHERE rowid=?', id, function(err) {
       if (err)
         reject(err);
       else

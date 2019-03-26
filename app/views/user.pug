@@ -4,6 +4,8 @@ main.login-form
     .row.justify-content-center
       .col-md-8
         .card
-          .card-header= user.username
           .card-body
-            h3= user.admin ? 'ADMIN' : 'NOT ADMIN'
+            h2.card-title= user.username
+            p= user.admin ? 'ADMIN' : 'NOT ADMIN'
+            form(action='/users/' + user.rowid + '/delete' method='POST')
+              button.btn.btn-danger(type='submit') Delete

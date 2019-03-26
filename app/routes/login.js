@@ -8,8 +8,8 @@ router.post('/login', (req, res) => {
   passport.authenticate('local', { session: true }, (err, user) => {
     if (err) {
       res.status(401).render('login', {
-        title: 'IT Reporting - Login',
-        header: 'IT Reporting',
+        title: 'IT Ticketing - Login',
+        header: 'IT Ticketing',
         err: err
       });
       return;
@@ -18,8 +18,8 @@ router.post('/login', (req, res) => {
     req.login(user, { session: false }, (err) => {
       if (err) {
         res.status(401).render('login', {
-          title: 'IT Reporting - Login',
-          header: 'IT Reporting',
+          title: 'IT Ticketing - Login',
+          header: 'IT Ticketing',
           err: err
         });
       }
