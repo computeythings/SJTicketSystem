@@ -1,5 +1,5 @@
 "use strict"
-process.env.REPORTS_DATABASE = ':memory:';
+process.env.DATABASE = ':memory:';
 const assert = require('assert');
 const reports = require('../app/controllers/reports.js');
 const Report = require('../app/models/report.js')

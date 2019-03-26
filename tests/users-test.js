@@ -1,6 +1,6 @@
 "use strict"
 require('dotenv').config();
-process.env.USERS_DATABASE = ':memory:';
+process.env.DATABASE = ':memory:';
 const assert = require('assert');
 const users = require('../app/controllers/users.js');
 const User = require('../app/models/user.js');
