@@ -19,26 +19,25 @@ const REFRESH_AUD = 'refresh';
 const ALGORITHM = process.env.SECRET ? 'HS256' : 'RS256';
 
 
-exports.verifyRefreshToken = (token, callback, cert=CERT) => {
+exports.verifyRefreshToken = (token, requestor, callback, cert=CERT) => {
   if(!token)
     return Error('TokenExistenceError');
-  return jwt.verify(token, cert, { iss: ISSUER, aud: REFRESH_AUD },
+  return jwt.verify(token, cert, { subject: requestor, issuer: ISSUER, audience: REFRESH_AUD },
     callback);
 }
 
 // throws Invalid Signature if signature is bad
-exports.verifyAccessToken = (token, callback, cert=CERT) => {
+exports.verifyAccessToken = (token, requestor, callback, cert=CERT) => {
   if(!token)
     throw new Error('TokenExistenceError');
-  return jwt.verify(token, cert, { iss: ISSUER, aud: ACCESS_AUD },
+  return jwt.verify(token, cert, { subject: requestor, issuer: ISSUER, audience: ACCESS_AUD },
     callback);
 }
 
-exports.verifyAdminToken = (token, callback, cert=CERT) => {
+exports.verifyAdminToken = (token, requestor, callback, cert=CERT) => {
   if(!token)
     throw new Error('TokenExistenceError');
-  return jwt.verify(token, cert, { iss: ISSUER, aud: ACCESS_AUD},
-    (err, decoded) => {
+  return exports.verifyAccessToken(token, requestor, (err, decoded) => {
       if (!decoded.admin)
         return callback(new Error('ACCESS DENIED'));
       callback(err, decoded);
@@ -61,10 +60,10 @@ exports.generateRefreshToken = (user, callback, exp=REFRESH_EXP, key=KEY) => {
   );
 }
 
-exports.generateAccessToken = (refreshToken, callback, exp=ACCESS_EXP,
+exports.generateAccessToken = (refreshToken, requestor, callback, exp=ACCESS_EXP,
   key=KEY, cert=CERT) => {
   return new Promise((resolve, reject) => {
-    this.verifyRefreshToken(refreshToken, (err, decoded) => {
+    this.verifyRefreshToken(refreshToken, requestor, (err, decoded) => {
       if(err) { resolve(err); }
       resolve(jwt.sign(
         {

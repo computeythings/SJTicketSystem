@@ -24,7 +24,7 @@ router.post('/login', (req, res) => {
         });
       }
       let refresh = tokens.generateRefreshToken(user);
-      let access = tokens.generateAccessToken(refresh);
+      let access = tokens.generateAccessToken(refresh, user.username);
 
       res.cookie('refresh_jwt', refresh, {
         httpOnly: true,
