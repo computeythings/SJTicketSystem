@@ -5,9 +5,10 @@ process.env.SECRET = 'S3KRET';
 
 const jwt = require('jsonwebtoken');
 const tokens = require('../app/util/tokenhandler.js');
+const User = require('../app/models/user.js');
 const assert = require('assert');
 
-const testID = 'tester';
+const testUser = new User('testUser', '*********', false);
 const fakeSecret = 'FAKE-S3KRET';
 var tokenRef,tokenAcc,fakeTokenRef,fakeTokenAcc,expiredRef,expiredAcc;
 
@@ -16,27 +17,27 @@ describe('tokenhandler.js', () => {
   describe('#generateRefreshToken(id)', () => {
 
     it('should generate a valid token given an id', () => {
-      tokenRef = tokens.generateRefreshToken(testID);
-      fakeTokenRef = tokens.generateRefreshToken(testID, null, 60*60*24*30,
+      tokenRef = tokens.generateRefreshToken(testUser);
+      fakeTokenRef = tokens.generateRefreshToken(testUser, null, 60*60*24*30,
         fakeSecret);
-      expiredRef = tokens.generateRefreshToken(testID, null, -3600);
+      expiredRef = tokens.generateRefreshToken(testUser, null, -3600);
       assert(jwt.verify(tokenRef, process.env.SECRET));
     });
   });
 
   describe('#generateAccessToken(refreshToken, id)', () => {
 
-    it('should generate an access token given a valid refresh token', () => {
-      tokenAcc = tokens.generateAccessToken(tokenRef, testID);
-      fakeTokenAcc = tokens.generateAccessToken(fakeTokenRef, testID, null,
+    it('should generate an access token given a valid refresh token', async () => {
+      tokenAcc = await tokens.generateAccessToken(tokenRef, testUser.username);
+      fakeTokenAcc = await tokens.generateAccessToken(fakeTokenRef, testUser.username, null,
         60*60*24*30, fakeSecret, fakeSecret);
-      expiredAcc = tokens.generateAccessToken(tokenRef, testID, null, -3600);
-      assert(jwt.verify(tokenRef, process.env.SECRET));
+      expiredAcc = await tokens.generateAccessToken(tokenRef, testUser.username, null, -3600);
+      assert(jwt.verify(tokenAcc, process.env.SECRET));
     });
 
     it('should fail to generate an access token given falsified refresh token',
     done => {
-      tokens.generateAccessToken(fakeTokenRef, testID).then(res => {
+      tokens.generateAccessToken(fakeTokenRef, testUser.username).then(res => {
         done(Error('Failed to reject falsified token'));
       }).catch(err => {
         assert.equal(err.name, 'JsonWebTokenError');
@@ -48,13 +49,13 @@ describe('tokenhandler.js', () => {
   describe('#verifyRefreshToken(token, id)', () => {
 
     it('should return true if a token is valid', () => {
-      assert(tokens.verifyRefreshToken(tokenRef, testID));
+      assert(tokens.verifyRefreshToken(tokenRef, testUser.username));
     });
 
     it('should throw an error if a token was falsified', done => {
       // I couldn't get assert.throws to work here to this is the workaround
       try {
-        tokens.verifyRefreshToken(fakeTokenRef, testID);
+        tokens.verifyRefreshToken(fakeTokenRef, testUser.username);
         done(Error('Failed to reject falsified token'));
       } catch(err) {
         assert.equal(err.name, 'JsonWebTokenError');
@@ -65,7 +66,7 @@ describe('tokenhandler.js', () => {
     it('should throw an error if a token is expired', done => {
       // I couldn't get assert.throws to work here to this is the workaround
       try {
-        tokens.verifyRefreshToken(expiredRef, testID);
+        tokens.verifyRefreshToken(expiredRef, testUser.username);
         done(Error('Failed to reject falsified token'));
       } catch(err) {
         assert.equal(err.name, 'TokenExpiredError');
@@ -77,13 +78,13 @@ describe('tokenhandler.js', () => {
   describe('#verifyAccessToken(token, id)', () => {
 
     it('should return true if a token is valid', () => {
-      assert(tokens.verifyAccessToken(tokenAcc, testID));
+      assert(tokens.verifyAccessToken(tokenAcc, testUser.username));
     });
 
     it('should throw an error if a token was falsified', done => {
       // I couldn't get assert.throws to work here to this is the workaround
       try {
-        tokens.verifyAccessToken(fakeTokenAcc, testID);
+        tokens.verifyAccessToken(fakeTokenAcc, testUser.username);
         done(Error('Failed to reject falsified token'));
       } catch(err) {
         assert.equal(err.name, 'JsonWebTokenError');
@@ -94,7 +95,7 @@ describe('tokenhandler.js', () => {
     it('should throw an error if a token is expired', done => {
       // I couldn't get assert.throws to work here to this is the workaround
       try {
-        tokens.verifyAccessToken(expiredAcc, testID);
+        tokens.verifyAccessToken(expiredAcc, testUser.username);
         done(Error('Failed to reject falsified token'));
       } catch(err) {
         assert.equal(err.name, 'TokenExpiredError');

@@ -63,7 +63,7 @@ exports.generateAccessToken = (refreshToken, requestor, callback, exp=ACCESS_EXP
   key=KEY, cert=CERT) => {
   return new Promise((resolve, reject) => {
     this.verifyRefreshToken(refreshToken, requestor, (err, decoded) => {
-      if(err) { reject(err); }
+      if(err) { return reject(err); }
       resolve(jwt.sign(
         {
           iss: ISSUER,

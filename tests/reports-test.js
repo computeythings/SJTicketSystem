@@ -30,7 +30,7 @@ after(() => {
 describe('reports.js', () => {
   describe('#addReport(report)', () => {
     it('should successfully add a test report', (done) => {
-      reports.addReport(testReport).then((inserted) => {
+      reports.addReport(testReport).then(inserted => {
         assert.equal(inserted, 1);
         done();
       }).catch(err => {
@@ -44,7 +44,7 @@ describe('reports.js', () => {
         done();
       }).catch(err => {
         done(err);
-      })
+      });
     });
   });
 });
