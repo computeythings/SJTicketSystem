@@ -37,17 +37,17 @@ app.use(require('./app/routes/reports'));
 
 if(process.env.SERVER_CERT && process.env.SERVER_KEY
   || process.env.NODE_ENV === 'PRODUCTION') {
+    let port = process.env.NODE_PORT || 8443;
     https.createServer({
       key: fs.readFileSync(process.env.SERVER_KEY),
       cert: fs.readFileSync(process.env.SERVER_CERT)
-    }, app).listen(process.env.NODE_PORT || 8443, () => {
-      console.log('Server running on http://localhost:' +
-       process.env.NODE_PORT || 8443);
+    }, app).listen(port, () => {
+      console.log('Server running on http://localhost:' + port);
     });
   }
 else {
-  app.listen(process.env.NODE_PORT || 8000, () => {
-    console.log('Server running on http://localhost:' +
-     process.env.NODE_PORT || 8443);
+  let port = process.env.NODE_PORT || 8000;
+  app.listen(port, () => {
+    console.log('Server running on http://localhost:' + port);
   });
 }
