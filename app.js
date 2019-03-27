@@ -41,11 +41,13 @@ if(process.env.SERVER_CERT && process.env.SERVER_KEY
       key: fs.readFileSync(process.env.SERVER_KEY),
       cert: fs.readFileSync(process.env.SERVER_CERT)
     }, app).listen(process.env.NODE_PORT || 8443, () => {
-      console.log('Server running on http://localhost:8443/');
+      console.log('Server running on http://localhost:' +
+       process.env.NODE_PORT || 8443);
     });
   }
 else {
   app.listen(process.env.NODE_PORT || 8000, () => {
-    console.log('Server running on http://localhost:8000/');
+    console.log('Server running on http://localhost:' +
+     process.env.NODE_PORT || 8443);
   });
 }
