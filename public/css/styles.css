@@ -15,7 +15,10 @@ h1
 {
   padding: 1rem;
 }
-
+p
+{
+  white-space:pre-wrap;
+}
 .main
 {
   margin: 1.2rem;
