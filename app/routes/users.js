@@ -14,12 +14,11 @@ router.post('/users/add', (req, res) => {
   });
 });
 
-router.post('/users/:userID/delete', (req, res) => {
+router.post('/users/:userID/delete', async (req, res) => {
   // prevent deletion of currently logged in user
-  users.getUser(req.session.user).then(row => {
-    if(row.rowid === req.params.userID);
-      return res.status(503).send('You cannot delete your own user!');
-  });
+  let current = await users.getUser(req.session.user);
+  if(current.rowid == req.params.userID)
+    return res.status(503).send('You cannot delete your own user!');
 
   users.deleteUser(req.params.userID).then(result => {
     res.status(301).redirect('/users');
@@ -27,6 +26,10 @@ router.post('/users/:userID/delete', (req, res) => {
     console.log('Failed to delete user', err);
     res.status(503).redirect(req.url);
   });
+});
+
+router.post('/users/:userID/update', (req, res) => {
+  res.send('TODO: implement this');
 });
 
 router.get('/users/add', (req, res) => {
