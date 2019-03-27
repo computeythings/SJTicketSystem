@@ -1,9 +1,8 @@
 "use strict"
-require('dotenv').config();
 const jwt = require('jsonwebtoken');
 const fs = require('fs');
 
-const ISSUER =  process.env.SERVER_NAME || 'IT-Reports';
+const ISSUER =  process.env.SERVER_NAME;
 const CERT = process.env.SECRET ? process.env.SECRET : fs.readFileSync(process.env.SERVER_CERT);
 const KEY = process.env.SECRET ? process.env.SECRET : fs.readFileSync(process.env.SERVER_KEY);
 // expiration values are in seconds

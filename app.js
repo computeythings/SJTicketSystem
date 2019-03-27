@@ -4,7 +4,7 @@ if(process.env.NODE_ENV === 'TEST') {
   process.env.DATABASE = ':memory:';
   process.env.SERVER_NAME = 'TEST-SERVER';
 }
-
+if(!process.env.SERVER_NAME) { process.env.SERVER_NAME = 'IT-Ticketing' }
 // for security purposes, we want a new server instance for each reboot
 process.env.SERVER_NAME += Math.floor(Math.random() * 999999);
 
