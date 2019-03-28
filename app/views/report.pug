@@ -16,7 +16,7 @@ main.login-form
             p
             p= ticket.description
 
-            span= ' ' + ticket.timeString + ' ' + ticket.dateString
+            span(style="float: right")= ' ' + ticket.timeString + ' ' + ticket.dateString
         each comment in comments || []
           .card
             .card-body
