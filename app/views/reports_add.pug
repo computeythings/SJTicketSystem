@@ -16,8 +16,8 @@ include header.pug
       label(for='subject') Subject:
       input#subject.form-control(type='text' name='subject' required)
     div.form-group
-      label(for='description') Description:
-      input#description.form-control(type='text' name='description' required)
+      label(for='comment') Description:
+      textarea#comment.form-control(type='text' name='description' rows='8' required)
     div.form-group
       label(for='assignedTo') Assigned To:
       input#assignedTo.form-control(type='text' name='assignedTo' required)
