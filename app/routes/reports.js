@@ -25,7 +25,7 @@ router.get('/reports/add', (req, res) => {
     auth: req.session.user,
     title: 'Add Ticket',
     heading: 'Add a new ticket',
-    categories: ['workstation', 'printer/scanner', 'server', 'upgrade', 'software', 'purchasing', 'research']
+    categories: ['workstation', 'printer/scanner', 'server', 'upgrade', 'software', 'purchasing', 'research', 'new user']
   });
 });
 
