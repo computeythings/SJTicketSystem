@@ -8,6 +8,7 @@ const RESTRICTED_ROUTES = ['/users*', '/tickets/add*'];
 
 // authenticate when accessing any URL
 router.get('*', (req, res, next) => {
+  console.log('GET at',req.url,'from',req.connection.remoteAddress);
   // pass unauthenticated to /login
   if(req.url === '/login') {
     return next();
@@ -40,6 +41,7 @@ RESTRICTED_ROUTES.forEach((route) => {
 
 // restrict POSTing to any URL
 router.post('*', (req, res, next) => {
+  console.log('POST at',req.url,'from',req.connection.remoteAddress);
   // pass unauthenticated to /login
   if(req.url === '/login') {
     return next();
