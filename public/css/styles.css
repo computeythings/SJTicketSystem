@@ -64,7 +64,7 @@ tr td:last-child
     white-space: nowrap;
     padding-right: 2rem;
 }
-.reports-row
+.tickets-row
 {
   cursor: pointer;
 }

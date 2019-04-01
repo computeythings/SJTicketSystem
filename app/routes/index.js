@@ -4,7 +4,7 @@ const express = require('express');
 const router = express.Router();
 
 // Routes which require admin credentials
-const RESTRICTED_ROUTES = ['/users*', '/reports/add*'];
+const RESTRICTED_ROUTES = ['/users*', '/tickets/add*'];
 
 // authenticate when accessing any URL
 router.get('*', (req, res, next) => {
@@ -50,10 +50,6 @@ router.post('*', (req, res, next) => {
       return res.status(401).send('You do not have permission to modify this.');
     return next();
   })(req, res, next);
-});
-
-router.get('/', (req, res) => {
-  res.redirect('/reports');
 });
 
 module.exports = router;

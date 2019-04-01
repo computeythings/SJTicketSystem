@@ -1,10 +1,10 @@
 "use strict"
 process.env.DATABASE = ':memory:';
 const assert = require('assert');
-const reports = require('../app/controllers/reports.js');
-const Report = require('../app/models/report.js')
+const tickets = require('../app/controllers/tickets.js');
+const Ticket = require('../app/models/ticket.js')
 
-const testReport = new Report(
+const testTicket = new Ticket(
   'Test Title',
   'Test User',
   'Test Category',
@@ -15,7 +15,7 @@ const testReport = new Report(
 // Before we start, we want to make sure the database has been initialized
 before((done) => {
   (function start() {
-    if(reports.initialized()) {
+    if(tickets.initialized()) {
       done();
     } else {
       setTimeout(start, 100);
@@ -24,13 +24,13 @@ before((done) => {
 });
 
 after(() => {
-  reports.close();
+  tickets.close();
 });
 
-describe('reports.js', () => {
-  describe('#addReport(report)', () => {
-    it('should successfully add a test report', (done) => {
-      reports.addReport(testReport).then(inserted => {
+describe('tickets.js', () => {
+  describe('#addTicket(ticket)', () => {
+    it('should successfully add a test ticket', (done) => {
+      tickets.addTicket(testTicket).then(inserted => {
         assert.equal(inserted, 1);
         done();
       }).catch(err => {
@@ -39,8 +39,8 @@ describe('reports.js', () => {
     });
   });
   describe('#all()', () => {
-    it('should return a list of all reports', done => {
-      reports.all().then(res => {
+    it('should return a list of all tickets', done => {
+      tickets.all().then(res => {
         done();
       }).catch(err => {
         done(err);

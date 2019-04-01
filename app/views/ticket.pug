@@ -27,7 +27,7 @@ main.login-form
         .card
           .card-body
             h2.card-title Comment
-            form(action='/reports/'+ticket.id+'/comment' method='POST')
+            form(action='/tickets/'+ticket.id+'/comment' method='POST')
               if err
                 .form-group.row.alert.alert-danger
                   strong= err

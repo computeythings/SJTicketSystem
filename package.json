@@ -1,5 +1,5 @@
 {
-  "name": "it-reporting",
+  "name": "it-ticketing",
   "version": "1.0.0",
   "description": "SQL DB for reporting and tracking IT requests",
   "main": "app.js",
