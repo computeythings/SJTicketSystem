@@ -2,7 +2,7 @@ include header.pug
 
 .main
   h2 Add a user:
-  form(method='POST' action='/users/add')
+  form(method='POST' action='/users/add' oninput='password_confirm.setCustomValidity(password_confirm.value != password.value ? "Passwords do not match." : "")')
     div.form-group
       label(for='name') Name:
       input#name.form-control(type='text' name='username')
