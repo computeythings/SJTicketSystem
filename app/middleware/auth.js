@@ -27,7 +27,7 @@ passport.use('jwt', new CustomStrategy((req, done) => {
     return done(null, false, {message: 'No JWT'});
   }
 
-  tokens.verifyAccessToken(req.cookies.jwt, req.session.user, (err, decoded) => {
+  tokens.verifyAccessToken(req.cookies.jwt, (err, decoded) => {
     if (err) { return done(err); }
     req.session.user = decoded.sub;
     req.session.admin = decoded.admin;
@@ -42,9 +42,10 @@ passport.use('jwt_admin', new CustomStrategy((req, done) => {
     return done(null, false, {message: 'No JWT'});
   }
 
-  tokens.verifyAdminToken(req.cookies.jwt, req.session.user, (err, decoded) => {
+  tokens.verifyAdminToken(req.cookies.jwt, (err, decoded) => {
     if (err) { return done(null, false, { message: err.message }); }
-    req.session.admin = true;
+    req.session.user = decoded.sub;
+    req.session.admin = decoded.admin;
     return done(null, decoded, { message: 'JWT ADMIN' });
   });
 }));
@@ -54,8 +55,10 @@ passport.use('jwt_refresh', new CustomStrategy((req, done) => {
   if(!req.cookies || !req.cookies.refresh_jwt)
     return done(null, false, { message: 'No Refresh Token'} );
 
-  tokens.generateAccessToken(req.cookies.refresh_jwt, req.session.user, (err, signed) => {
+  tokens.generateAccessToken(req.cookies.refresh_jwt, (err, signed, decoded) => {
     if (err) { return done(null, false, { message: err }); }
+    req.session.user = decoded.sub;
+    req.session.admin = decoded.admin;
     return done(null, signed, { message: 'JWT REFRESH' });
   });
 }));

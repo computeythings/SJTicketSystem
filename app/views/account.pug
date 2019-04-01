@@ -5,7 +5,7 @@ main.login-form
       .col-md-8
         .card
           .card-body
-            h2.card-title= user.username
+            h2.card-title= user
             form(method='POST')
               .form-group.row
                 label(for='current_pw') Current Password:
@@ -16,8 +16,4 @@ main.login-form
               .form-group.row
                 label(for='pw_confirm') Confirm:
                 input#pw_confirm.form-control(type='password' name='password_confirm')
-              .form-check.row
-                input#isAdmin.form-check-input(type='checkbox' name='isAdmin' checked= user.admin ? true : false)
-                label.form-check-label(for='isAdmin') Admin
-              button.btn.btn-primary(type='submit' formaction='/users/' + user.rowid + '/update') Update
-              button.btn.btn-danger.float-right(type='submit' formaction='/users/' + user.rowid + '/delete') Delete
+              button.btn.btn-primary(type='submit' formaction='/account/update') Update

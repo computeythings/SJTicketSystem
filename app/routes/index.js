@@ -17,7 +17,6 @@ router.get('*', (req, res, next) => {
     if (err || !result) {
       req.session.returnTo = req.url;
     }
-
     if(data && data.message && data.message === 'JWT REFRESH') {
       res.cookie('jwt', result, {
           httpOnly: true,
@@ -32,6 +31,7 @@ router.get('*', (req, res, next) => {
 RESTRICTED_ROUTES.forEach((route) => {
   router.get(route, (req, res, next) => {
     passport.authenticate('jwt_admin', (err, result, data) => {
+      console.error(err);
       if (err || ! result)
         return res.status(401).send('You dont have permission to access this.');
       return next();

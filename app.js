@@ -35,8 +35,7 @@ app.use(require('./app/routes/login'));
 app.use(require('./app/routes/users'));
 app.use(require('./app/routes/reports'));
 
-if(process.env.SERVER_CERT && process.env.SERVER_KEY
-  || process.env.NODE_ENV === 'PRODUCTION') {
+if(process.env.SERVER_CERT && process.env.SERVER_KEY) {
     let port = process.env.NODE_PORT || 8443;
     https.createServer({
       key: fs.readFileSync(process.env.SERVER_KEY),

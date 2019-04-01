@@ -1,6 +1,8 @@
 "use strict"
 const jwt = require('jsonwebtoken');
 const fs = require('fs');
+const users = require('../controllers/users.js');
+const User = require('../models/user.js');
 
 const ISSUER =  process.env.SERVER_NAME;
 const CERT = process.env.SECRET ? process.env.SECRET : fs.readFileSync(process.env.SERVER_CERT);
@@ -18,25 +20,27 @@ const REFRESH_AUD = 'refresh';
 const ALGORITHM = process.env.SECRET ? 'HS256' : 'RS256';
 
 
-exports.verifyRefreshToken = (token, requestor, callback, cert=CERT) => {
+exports.verifyRefreshToken = (token, callback, cert=CERT) => {
   if(!token)
     return Error('TokenExistenceError');
-  return jwt.verify(token, cert, { subject: requestor, issuer: ISSUER, audience: REFRESH_AUD },
+  return jwt.verify(token, cert, { issuer: ISSUER, audience: REFRESH_AUD },
     callback);
 }
 
 // throws Invalid Signature if signature is bad
-exports.verifyAccessToken = (token, requestor, callback, cert=CERT) => {
+exports.verifyAccessToken = (token, callback, cert=CERT) => {
   if(!token)
     throw new Error('TokenExistenceError');
-  return jwt.verify(token, cert, { subject: requestor, issuer: ISSUER, audience: ACCESS_AUD },
+
+  return jwt.verify(token, cert, { issuer: ISSUER, audience: ACCESS_AUD },
     callback);
 }
 
-exports.verifyAdminToken = (token, requestor, callback, cert=CERT) => {
+exports.verifyAdminToken = (token, callback, cert=CERT) => {
   if(!token)
     throw new Error('TokenExistenceError');
-  return exports.verifyAccessToken(token, requestor, (err, decoded) => {
+
+  return exports.verifyAccessToken(token, (err, decoded) => {
       if (!decoded.admin)
         return callback(new Error('ACCESS DENIED'));
       callback(err, decoded);
@@ -59,10 +63,10 @@ exports.generateRefreshToken = (user, callback, exp=REFRESH_EXP, key=KEY) => {
   );
 }
 
-exports.generateAccessToken = (refreshToken, requestor, callback, exp=ACCESS_EXP,
+exports.generateAccessToken = (refreshToken, callback, exp=ACCESS_EXP,
   key=KEY, cert=CERT) => {
   return new Promise((resolve, reject) => {
-    this.verifyRefreshToken(refreshToken, requestor, (err, decoded) => {
+    this.verifyRefreshToken(refreshToken, (err, decoded) => {
       if(err) { return reject(err); }
       resolve(jwt.sign(
         {
@@ -75,7 +79,8 @@ exports.generateAccessToken = (refreshToken, requestor, callback, exp=ACCESS_EXP
         {
           algorithm: ALGORITHM,
           expiresIn: exp
-        }, callback
+        }, callback ? (accErr, accSigned) =>
+              { callback(accErr, accSigned, decoded); } : null
       ));
     }, cert);
   });

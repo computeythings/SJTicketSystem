@@ -15,7 +15,7 @@ router.post('/login', (req, res) => {
       return;
     }
 
-    req.login(user, { session: false }, (err) => {
+    req.login(user, { session: false }, async (err) => {
       if (err) {
         res.status(401).render('login', {
           title: 'IT Ticketing - Login',
@@ -24,7 +24,7 @@ router.post('/login', (req, res) => {
         });
       }
       let refresh = tokens.generateRefreshToken(user);
-      let access = tokens.generateAccessToken(refresh, user.username);
+      let access = await tokens.generateAccessToken(refresh);
 
       res.cookie('refresh_jwt', refresh, {
         httpOnly: true,

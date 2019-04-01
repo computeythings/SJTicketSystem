@@ -28,7 +28,7 @@ router.post('/users/:userID/delete', async (req, res) => {
   });
 });
 
-router.post('/users/:userID/update', (req, res) => {
+router.post('/account/update', (req, res) => {
   res.send('TODO: implement this');
 });
 
@@ -40,23 +40,11 @@ router.get('/users/add', (req, res) => {
   });
 });
 
-router.get('/users/:user', (req, res) => {
-  users.getUser(req.params.user).then(result => {
-    res.render('user', {
-      auth: req.session.user,
-      user: result
-    });
-  }).catch(err => {
-    console.error(err);
-    res.status(404).send('User not found');
-  })
-});
-
-router.get('/users/:user', (req, res) => {
-  users.getUser(req.params.user).then(result => {
-    res.send(result);
-  }).catch(err => {
-    res.status(503).send(err);
+router.get('/account', (req, res) => {
+  res.render('account', {
+    title: req.session.user,
+    auth: req.session.user,
+    user: req.session.user
   });
 });
 
