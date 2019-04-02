@@ -51,6 +51,20 @@ textarea
 }
 
 /*
+  FORM STYLES
+*/
+.err_feedback
+{
+  color: rgba(255, 0, 0, 0.8);
+}
+
+.invalid
+{
+  border-color: rgba(255, 0, 0, 0.8);
+  outline: 0 none;
+}
+
+/*
   TABLE STYLES
 */
 tr th:first-child

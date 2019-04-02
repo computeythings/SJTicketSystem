@@ -11,7 +11,7 @@ router.post('/users/add', (req, res) => {
   users.addUser(user).then(result => {
     res.status(201).redirect('/users');
   }).catch(err => {
-    res.status(503).send(err);
+    res.status(503).json(err);
   });
 });
 
@@ -33,9 +33,12 @@ router.post('/account/update', (req, res) => {
   users.changePassword(req.session.user, req.body.current, req.body.password)
   .then(success => {
     if(success)
-      res.send('Password updated.');
+      res.status(200).send('Password updated.');
+    else
+      res.status(503).send('Unexpected Failure')
   }).catch(err => {
-    res.send('Incorrect Password');
+    console.log(err)
+    res.status(401).send('Incorrect Password');
   });
 });
 
