@@ -1,6 +1,7 @@
 "use strict"
 const express = require('express');
 const router = express.Router();
+const passport = require('passport');
 const users = require('../controllers/users.js');
 const User = require('../models/user.js');
 
@@ -29,7 +30,13 @@ router.post('/users/:userID/delete', async (req, res) => {
 });
 
 router.post('/account/update', (req, res) => {
-  res.send('TODO: implement this');
+  users.changePassword(req.session.user, req.body.current, req.body.password)
+  .then(success => {
+    if(success)
+      res.send('Password updated.');
+  }).catch(err => {
+    res.send('Incorrect Password');
+  });
 });
 
 router.get('/users/add', (req, res) => {
@@ -42,7 +49,7 @@ router.get('/users/add', (req, res) => {
 
 router.get('/account', (req, res) => {
   res.render('account', {
-    title: req.session.user,
+    title: 'My Account',
     auth: req.session.user,
     user: req.session.user
   });

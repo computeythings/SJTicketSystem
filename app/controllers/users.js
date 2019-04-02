@@ -77,6 +77,32 @@ exports.login = (username, password) => {
   });
 }
 
+exports.changePassword = (username, passwordOld, passwordNew) => {
+  return new Promise((resolve, reject) => {
+    exports.login(username, passwordOld).then(success => {
+      if(!success)
+        return reject('Incorrect Password');
+      bcrypt.hash(passwordNew, SALT_ROUNDS, (err, hash) => {
+          if (err)
+            reject(err);
+          db.run(
+            'UPDATE users SET password = $hash WHERE username IS $user',
+            {
+              $user: username,
+              $hash: hash
+            }, function(err) {
+              if(err)
+                reject(err);
+              else
+                resolve(this.lastID);
+            });
+      });
+    }).catch(err => {
+      reject(err);
+    });
+  });
+}
+
 exports.getUser = name => {
   return new Promise((resolve, reject) => {
     db.get('SELECT ROWID, username, admin FROM users WHERE username is ?',

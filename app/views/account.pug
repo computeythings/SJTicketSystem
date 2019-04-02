@@ -6,14 +6,14 @@ main.login-form
         .card
           .card-body
             h2.card-title= user
-            form(method='POST')
+            form(method='POST' action='/account/update' oninput='password_confirm.setCustomValidity(password_confirm.value != password.value ? "Passwords do not match." : "")')
               .form-group.row
-                label(for='current_pw') Current Password:
-                input#pw.form-control(type='password' name='password')
+                label(for='current') Current Password:
+                input#current.form-control(type='password' name='current')
               .form-group.row
                 label(for='pw') New Password:
                 input#pw.form-control(type='password' name='password')
               .form-group.row
                 label(for='pw_confirm') Confirm:
                 input#pw_confirm.form-control(type='password' name='password_confirm')
-              button.btn.btn-primary(type='submit' formaction='/account/update') Update
+              button.btn.btn-primary(type='submit') Update

@@ -47,6 +47,11 @@ router.post('*', (req, res, next) => {
     return next();
   }
 
+  if(req.url === '/account/update') {
+    req.body.username = req.session.user;
+    return next();
+  }
+
   passport.authenticate('jwt_admin', (err, result, data) => {
     if (err || !result)
       return res.status(401).send('You do not have permission to modify this.');
