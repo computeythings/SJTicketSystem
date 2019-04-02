@@ -20,7 +20,6 @@ jQuery(document).ready(function($) {
       success: function(res) {
         $('#current').removeClass('invalid');
         $('#login_feedback').text('');
-        $('form')[0].reset();
         location.href = '/';
       },
       error: function(err) {
