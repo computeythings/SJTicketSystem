@@ -84,7 +84,7 @@ exports.changePassword = (username, passwordOld, passwordNew) => {
         return reject('Incorrect Password');
       bcrypt.hash(passwordNew, SALT_ROUNDS, (err, hash) => {
           if (err)
-            reject(err);
+            return reject(err);
           db.run(
             'UPDATE users SET password = $hash WHERE username IS $user',
             {
@@ -94,7 +94,7 @@ exports.changePassword = (username, passwordOld, passwordNew) => {
               if(err)
                 reject(err);
               else
-                resolve(this.lastID);
+                resolve('Password successfully updated.');
             });
       });
     }).catch(err => {

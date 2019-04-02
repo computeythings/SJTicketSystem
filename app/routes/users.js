@@ -33,7 +33,7 @@ router.post('/account/update', (req, res) => {
   users.changePassword(req.session.user, req.body.current, req.body.password)
   .then(success => {
     if(success)
-      res.status(200).send('Password updated.');
+      res.status(200).send(success);
     else
       res.status(503).send('Unexpected Failure')
   }).catch(err => {
