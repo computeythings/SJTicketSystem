@@ -53,7 +53,7 @@ textarea
 /*
   NAVBAR STYLES
 */
-#navbarDropdown
+[id$='Dropdown']
 {
   margin: 0;
 }

@@ -5,7 +5,7 @@ nav.navbar.navbar-expand-lg.navbar-dark.bg-primary.shadow-sm
     if isAdmin
       ul.navbar-nav
         li.nav-item.dropdown
-          button#navbarDropdown.btn.btn-primary.nav-link(href='#' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false')
+          button#adminDropdown.btn.btn-primary.nav-link(href='#' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false')
             |
             <i class="fas fa-cog"></i>
           .dropdown-menu.dropdown-menu-right(aria-labelledby='navbarDropdown')
@@ -13,7 +13,7 @@ nav.navbar.navbar-expand-lg.navbar-dark.bg-primary.shadow-sm
     if auth
       ul.navbar-nav
         li.nav-item.dropdown
-          button#navbarDropdown.btn.btn-primary.nav-link(href='#' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false')
+          button#userDropdown.btn.btn-primary.nav-link(href='#' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false')
             |
             <i class="fas fa-user"></i>
           .dropdown-menu.dropdown-menu-right(aria-labelledby='navbarDropdown')
