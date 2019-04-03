@@ -10,6 +10,7 @@ router.get('/', (req, res) => {
   tickets.all().then(result => {
     res.render('tickets', {
       auth: req.session.user,
+		  isAdmin: req.session.admin,
       admin: req.session.admin,
       title: 'Tickets',
       heading: 'Tickets',
@@ -23,6 +24,7 @@ router.get('/', (req, res) => {
 router.get('/tickets/add', (req, res) => {
   res.render('tickets_add', {
     auth: req.session.user,
+		isAdmin: req.session.admin,
     title: 'Add Ticket',
     heading: 'Add a new ticket',
     categories: ['workstation', 'printer/scanner', 'server', 'upgrade', 'software', 'purchasing', 'research', 'new user']
@@ -33,6 +35,7 @@ router.get('/tickets/:ticketID', (req, res) => {
   tickets.getTicket(req.params.ticketID).then(async result => {
     res.render('ticket', {
       auth: req.session.user,
+		  isAdmin: req.session.admin,
       title: 'Ticket #' + result.rowid,
       ticket:  new Ticket(result),
       comments: await comments.forTicket(result.rowid),

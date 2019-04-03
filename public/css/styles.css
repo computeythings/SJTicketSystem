@@ -51,6 +51,14 @@ textarea
 }
 
 /*
+  NAVBAR STYLES
+*/
+#navbarDropdown
+{
+  margin: 0;
+}
+
+/*
   FORM STYLES
 */
 .err_feedback

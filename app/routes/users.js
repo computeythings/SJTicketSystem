@@ -45,6 +45,7 @@ router.post('/account/update', (req, res) => {
 router.get('/users/add', (req, res) => {
   res.render('users_add', {
     auth: req.session.user,
+		isAdmin: req.session.admin,
     title: 'Add User',
     heading: 'Add a new user'
   });
@@ -54,6 +55,7 @@ router.get('/account', (req, res) => {
   res.render('account', {
     title: 'My Account',
     auth: req.session.user,
+		isAdmin: req.session.admin,
     user: req.session.user
   });
 });
@@ -65,6 +67,7 @@ router.get('/users', (req, res) => {
       users.all().then(result => {
         res.render('users', {
           auth: req.session.user,
+		      isAdmin: req.session.admin,
           title: 'IT Ticketing - Users',
           heading: 'Users',
           users: result
