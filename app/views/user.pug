@@ -1,0 +1,14 @@
+include header.pug
+main.login-form
+  .cotainer
+    .row.justify-content-center
+      .col-md-8
+        .card
+          .card-body
+            h2.card-title= user.username
+            form(method='POST')
+              .form-check.row
+                input#isAdmin.form-check-input(type='checkbox' name='admin' checked= user.admin ? true : false)
+                label.form-check-label(for='admin') admin
+              button.btn.btn-primary(type='submit' formaction='/users/' + user.rowid + '/update') Update
+              button.btn.btn-danger.float-right(type='submit' formaction='/users/' + user.rowid + '/delete') Delete

@@ -57,6 +57,28 @@ exports.addUser = user => {
   });
 }
 
+exports.updateUser = (id, data) => {
+  return new Promise((resolve, reject) => {
+    let values = [];
+    let sqlString = 'UPDATE users SET ';
+    for(const key in data) {
+      sqlString += key + ' = ? ';
+      values.push(data[key]);
+    }
+    sqlString += 'WHERE rowid = ?';
+    values.push(id);
+    console.log(sqlString);
+    db.run(sqlString, values, function(err) {
+      if(err) {
+        console.error(err);
+        reject(err);
+      }
+      else
+        resolve(this.lastID);
+    });
+  });
+}
+
 exports.login = (username, password) => {
   return new Promise((resolve, reject) => {
     db.get('SELECT * FROM users WHERE username IS ? COLLATE NOCASE', username,

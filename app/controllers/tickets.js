@@ -89,7 +89,7 @@ exports.updateTicket = (id, set) => {
         if(key === 'rowid')
           continue;
         sqlString += key + ' = ? ';
-        values.push(values[key]);
+        values.push(set[key]);
       }
 
       sqlString += 'WHERE rowid = ?';

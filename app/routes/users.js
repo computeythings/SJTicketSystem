@@ -29,6 +29,16 @@ router.post('/users/:userID/delete', async (req, res) => {
   });
 });
 
+router.post('/users/:userID/update', async (req, res) => {
+  users.updateUser(req.params.userID, parsePOST(req.body)).then(result => {
+    res.status(301);
+  }).catch(err => {
+    console.log('Failed to update user', err);
+    res.status(503);
+  });
+  res.redirect('/users');
+});
+
 router.post('/account/update', (req, res) => {
   users.changePassword(req.session.user, req.body.current, req.body.password)
   .then(success => {
@@ -48,6 +58,17 @@ router.get('/users/add', (req, res) => {
 		isAdmin: req.session.admin,
     title: 'Add User',
     heading: 'Add a new user'
+  });
+});
+
+router.get('/users/:userID', (req, res) => {
+  users.getUser(req.params.userID).then(user => {
+    res.render('user', {
+      title: 'User Management',
+      auth: req.session.user,
+      isAdmin: req.session.admin,
+      user: user
+    });
   });
 });
 
@@ -84,5 +105,17 @@ router.get('/users', (req, res) => {
     }
   })(0);
 });
+
+function parsePOST(json) {
+  switch(json.admin) {
+    case 'on':
+      json.admin = 1;
+      break;
+    default:
+      json.admin = 0;
+      break;
+  }
+  return json;
+}
 
 module.exports = router;
