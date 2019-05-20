@@ -10,19 +10,25 @@ const RESTRICTED_ROUTES = ['/users*', '/tickets/add*'];
 router.get('*', (req, res, next) => {
   console.log('GET at',req.url,'from',req.connection.remoteAddress);
   // pass unauthenticated to /login
-  if(req.url === '/login') {
+  if(req.url === '/login' || req.url === '/logout') {
+    return next();
+  }
+  if(req.url === '/favicon.ico') {
+    res.status(204);
     return next();
   }
 
-  passport.authenticate(['jwt', 'jwt_refresh'], (err, result, data) => {
+  passport.authenticate('jwt', (err, result, data) => {
     if (err || !result) {
       req.session.returnTo = req.url;
     }
     if(data && data.message && data.message === 'JWT REFRESH') {
       res.cookie('jwt', result, {
           httpOnly: true,
-          secure: process.env.NODE_ENV === 'PRODUCTION'
+          secure: process.env.NODE_ENV === 'PRODUCTION',
+          overwrite: true
         });
+      req.cookies.jwt = result;
     }
     return next();
   })(req, res, next);
@@ -32,8 +38,9 @@ router.get('*', (req, res, next) => {
 RESTRICTED_ROUTES.forEach((route) => {
   router.get(route, (req, res, next) => {
     passport.authenticate('jwt_admin', (err, result, data) => {
-      if (err || ! result)
+      if (err || ! result) {
         return res.status(401).send('You dont have permission to access this.');
+      }
       return next();
     })(req, res, next);
   });

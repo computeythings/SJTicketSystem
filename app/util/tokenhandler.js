@@ -8,7 +8,7 @@ const ISSUER =  process.env.SERVER_NAME;
 const CERT = process.env.SECRET ? process.env.SECRET : fs.readFileSync(process.env.SERVER_CERT);
 const KEY = process.env.SECRET ? process.env.SECRET : fs.readFileSync(process.env.SERVER_KEY);
 // expiration values are in seconds
-const ACCESS_EXP = 60*60 // 1 hour expiration
+const ACCESS_EXP = 5 // 1 hour expiration
 const REFRESH_EXP = 60*60*24*30 // 30 day expiration
 const ACCESS_AUD = 'access';
 const REFRESH_AUD = 'refresh';
@@ -41,9 +41,9 @@ exports.verifyAdminToken = (token, callback, cert=CERT) => {
     throw new Error('TokenExistenceError');
 
   return exports.verifyAccessToken(token, (err, decoded) => {
-      if (!decoded.admin)
+      if (!decoded || !decoded.admin)
         return callback(new Error('ACCESS DENIED'));
-      callback(err, decoded);
+      return callback(err, decoded);
     });
 }
 

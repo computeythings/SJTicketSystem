@@ -28,10 +28,21 @@ passport.use('jwt', new CustomStrategy((req, done) => {
   }
 
   tokens.verifyAccessToken(req.cookies.jwt, (err, decoded) => {
-    if (err) { return done(err); }
-    req.session.user = decoded.sub;
-    req.session.admin = decoded.admin;
-    return done(null, decoded, { message: 'JWT ACCESS' });
+    if (err || !decoded) {
+      if(!req.cookies.refresh_jwt)
+        return done(null, false, { message: 'No auth method available'} );
+      tokens.generateAccessToken(req.cookies.refresh_jwt,
+        (err, signed, decoded) => {
+          if (err) { return done(null, false, { message: err }); }
+          req.session.user = decoded.sub;
+          req.session.admin = decoded.admin;
+          return done(null, signed, { message: 'JWT REFRESH' });
+      });
+    } else {
+      req.session.user = decoded.sub;
+      req.session.admin = decoded.admin;
+      return done(null, decoded, { message: 'JWT ACCESS' });
+    }
   });
 }));
 
@@ -47,18 +58,5 @@ passport.use('jwt_admin', new CustomStrategy((req, done) => {
     req.session.user = decoded.sub;
     req.session.admin = decoded.admin;
     return done(null, decoded, { message: 'JWT ADMIN' });
-  });
-}));
-
-// Used to refresh expired access tokens
-passport.use('jwt_refresh', new CustomStrategy((req, done) => {
-  if(!req.cookies || !req.cookies.refresh_jwt)
-    return done(null, false, { message: 'No Refresh Token'} );
-
-  tokens.generateAccessToken(req.cookies.refresh_jwt, (err, signed, decoded) => {
-    if (err) { return done(null, false, { message: err }); }
-    req.session.user = decoded.sub;
-    req.session.admin = decoded.admin;
-    return done(null, signed, { message: 'JWT REFRESH' });
   });
 }));
