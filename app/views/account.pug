@@ -1,5 +1,4 @@
 include header.pug
-script(src='/js/submit.js')
 main.login-form
   .cotainer
     .row.justify-content-center
@@ -21,3 +20,5 @@ main.login-form
                 input#pw_confirm.form-control(type='password' name='password_confirm' required)
                 #pw_feedback.err_feedback
               button.btn.btn-primary(type='submit') Update
+footer
+  include footer.pug

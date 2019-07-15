@@ -1,6 +1,11 @@
 include header.pug
-script(src='/js/rowlink.js')
 body
+  div(style="padding-left:.5em;display:flex;align-items:center;justify-content:space-between")
+    form.form-inline.md-form.form-sm.active-cyan-2.mt-2
+      input.form-control.form-control-sm.mr-3.w-75(type='text', placeholder='Search', aria-label='Search')
+    if admin
+      a.btn.btn-primary(href='/tickets/add') Add
+
   table.table.table-bordered
     tr
       th(scope='col') Ticket #
@@ -25,5 +30,5 @@ body
             br
             span= ticket.dateString
 
-  if admin
-    a.btn.btn-primary(href='/tickets/add') Add
+footer
+  include footer.pug

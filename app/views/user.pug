@@ -12,3 +12,5 @@ main.login-form
                 label.form-check-label(for='admin') admin
               button.btn.btn-primary(type='submit' formaction='/users/' + user.rowid + '/update') Update
               button.btn.btn-danger.float-right(type='submit' formaction='/users/' + user.rowid + '/delete') Delete
+footer
+  include footer.pug

@@ -6,7 +6,7 @@
   "scripts": {
     "start": "set NODE_ENV=PRODUCTION&&node app.js",
     "test": "set NODE_ENV=TEST&&node ./node_modules/mocha/bin/mocha tests/*-test.js",
-    "test-server": "set NODE_ENV=TEST&&node ./node_modules/nodemon/bin/nodemon --verbose app.js"
+    "dev": "set NODE_ENV=TEST&&node ./node_modules/nodemon/bin/nodemon --verbose app.js"
   },
   "author": "",
   "license": "ISC",
