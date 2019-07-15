@@ -7,7 +7,12 @@ const Ticket = require('../models/ticket.js');
 const Comment = require('../models/comment.js');
 
 router.get('/', (req, res) => {
-  tickets.all().then(result => {
+  var query;
+  if(req.query.all === undefined)
+    query = tickets.allOpen
+  else
+    query = tickets.all
+  query().then(result => {
     res.render('tickets', {
       auth: req.session.user,
 		  isAdmin: req.session.admin,

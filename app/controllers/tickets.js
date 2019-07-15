@@ -33,7 +33,7 @@ exports.all = () => {
 exports.allOpen = () => {
   return new Promise((resolve, reject) => {
     var ticketsList = [];
-    db.each('SELECT ROWID, * FROM tickets WHERE closed != 1', (err, row) => {
+    db.each('SELECT ROWID, * FROM tickets WHERE closed != 1 ORDER BY date DESC', (err, row) => {
       if (err) { reject(err); }
       ticketsList.push(new Ticket(row));
     }, err => {
