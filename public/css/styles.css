@@ -34,6 +34,9 @@ textarea {
 .btn {
   margin: 1rem;
 }
+.hidden {
+  display: none;
+}
 
 /*
   NAVBAR STYLES
@@ -56,14 +59,34 @@ textarea {
 /*
   TABLE STYLES
 */
+.cheader-content {
+  display: flex;
+  cursor: pointer;
+  flex-grow: 1;
+  justify-content: space-between;
+}
+.headerLabel {
+  align-self: flex-end;
+}
+.sort-button {
+  align-self: flex-start;
+}
+.sortbox {
+  height: inherit;
+  display: flex;
+  flex-direction: column;
+  align-content: space-around;
+  justify-content: center;
+  padding: 0 .5em;
+}
 tr th:first-child {
-    width:1%;
-    white-space: nowrap;
+  width:1%;
+  white-space: nowrap;
 }
 tr td:last-child {
-    width:1%;
-    white-space: nowrap;
-    padding-right: 2rem;
+  width:1%;
+  white-space: nowrap;
+  padding-right: 2rem;
 }
 .tickets-row {
   cursor: pointer;
@@ -86,13 +109,13 @@ tr td:last-child {
   SEARCH BAR STYLES
 */
 .active-cyan-2 input[type=text]:focus:not([readonly]) {
-  border-bottom: 1px solid #4dd0e1;
-  box-shadow: 0 1px 0 0 #4dd0e1;
-  }
-  .active-cyan input[type=text] {
-  border-bottom: 1px solid #4dd0e1;
-  box-shadow: 0 1px 0 0 #4dd0e1;
-  }
-  .active-cyan .fa, .active-cyan-2 .fa {
-  color: #4dd0e1;
-  }
+border-bottom: 1px solid #4dd0e1;
+box-shadow: 0 1px 0 0 #4dd0e1;
+}
+.active-cyan input[type=text] {
+border-bottom: 1px solid #4dd0e1;
+box-shadow: 0 1px 0 0 #4dd0e1;
+}
+.active-cyan .fa, .active-cyan-2 .fa {
+color: #4dd0e1;
+}

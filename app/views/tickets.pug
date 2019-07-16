@@ -1,4 +1,5 @@
-include header.pug
+include header
+
 body
   div(style="padding-left:.5em;display:flex;align-items:center;justify-content:space-between")
     form.form-inline.md-form.form-sm.active-cyan-2.mt-2
@@ -6,29 +7,31 @@ body
     if admin
       a.btn.btn-primary(href='/tickets/add') Add
 
+  include columnHeader
   table.table.table-bordered
-    tr
-      th(scope='col') Ticket #
-      th(scope='col') User
-      th(scope='col') Category
-      th(scope='col') Subject
-      th(scope='col') Assigned To
-      th(scope='col') Date
-    each ticket in tickets
-      tr(class= ticket.closed ? 'closed' : undefined
-      data-href='/tickets/' + ticket.id tabindex=0).tickets-row
-        td.ticketNoRow= ticket.id
-        td.userRow= ticket.requestedBy
-        td.categoryRow= ticket.category
-        td.subjectRow
-          span.ticket-info
-            strong= ticket.subject
-        td.assignedRow= ticket.assignedTo
-        td.dateRow
-          span.ticket-date
-            span= ticket.timeString
-            br
-            span= ticket.dateString
+    thead
+      tr.tableHeader
+        +columnHeader('Ticket #', true)
+        +columnHeader('User', false)
+        +columnHeader('Category', false)
+        +columnHeader('Subject', false)
+        +columnHeader('Assigned To', false)
+        +columnHeader('Date', false)
+    tbody
+      each ticket in tickets
+        tr(class= ticket.closed ? 'closed' : undefined data-href='/tickets/' + ticket.id tabindex=0).tickets-row
+          td.ticketNoRow= ticket.id
+          td.userRow= ticket.requestedBy
+          td.categoryRow= ticket.category
+          td.subjectRow
+            span.ticket-info
+              strong= ticket.subject
+          td.assignedRow= ticket.assignedTo
+          td.dateRow
+            span.ticket-date
+              span= ticket.timeString
+              br
+              span= ticket.dateString
 
 footer
-  include footer.pug
+  include footer

@@ -1,0 +1,11 @@
+mixin columnHeader(title, sort)
+    th(scope='col' class= sort? 'descending':'')
+        .cheader-content
+            label.headerLabel=title
+            .sortbox
+                if(sort)
+                    i.sort-button.fas.fa-caret-up.hidden
+                    i.sort-button.fas.fa-caret-down
+                else
+                    i.sort-button.fas.fa-caret-up
+                    i.sort-button.fas.fa-caret-down
