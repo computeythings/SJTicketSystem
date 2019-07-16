@@ -11,12 +11,12 @@ body
   table.table.table-bordered
     thead
       tr.tableHeader
-        +columnHeader('Ticket #', true)
-        +columnHeader('User', false)
-        +columnHeader('Category', false)
-        +columnHeader('Subject', false)
-        +columnHeader('Assigned To', false)
-        +columnHeader('Date', false)
+        +columnHeader('id', 'Ticket #', true)
+        +columnHeader('requestedBy', 'User', false)
+        +columnHeader('category', 'Category', false)
+        +columnHeader('subject', 'Subject', false)
+        +columnHeader('assignedTo', 'Assigned To', false)
+        +columnHeader('date', 'Date', false)
     tbody
       each ticket in tickets
         tr(class= ticket.closed ? 'closed' : undefined data-href='/tickets/' + ticket.id tabindex=0).tickets-row

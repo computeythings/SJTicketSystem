@@ -32,7 +32,7 @@ router.get('/tickets/add', (req, res) => {
 		isAdmin: req.session.admin,
     title: 'Add Ticket',
     heading: 'Add a new ticket',
-    categories: ['workstation', 'printer/scanner', 'server', 'upgrade', 'software', 'purchasing', 'research', 'new user']
+    categories: ['workstation', 'printer/scanner', 'server', 'upgrade', 'software', 'hardware', 'purchasing', 'research', 'new user']
   });
 });
 
@@ -44,7 +44,7 @@ router.get('/tickets/:ticketID', (req, res) => {
       title: 'Ticket #' + result.rowid,
       ticket:  new Ticket(result),
       comments: await comments.forTicket(result.rowid),
-      closeOptions: ['fixed', 'wontfix', 'duplicate']
+      closeOptions: ['fixed', 'wontfix', 'duplicate', 'workaround']
     });
   }).catch(err => {
     res.status(503).send(err);

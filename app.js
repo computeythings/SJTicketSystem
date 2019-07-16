@@ -33,6 +33,7 @@ app.use(require('./app/routes/index'));
 app.use(require('./app/routes/login'));
 app.use(require('./app/routes/users'));
 app.use(require('./app/routes/tickets'));
+app.use('/api/v1', require('./app/routes/api'));
 
 if(process.env.SERVER_CERT && process.env.SERVER_KEY) {
     let port = process.env.NODE_PORT || 8443;

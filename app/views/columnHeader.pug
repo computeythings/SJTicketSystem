@@ -1,5 +1,5 @@
-mixin columnHeader(title, sort)
-    th(scope='col' class= sort? 'descending':'')
+mixin columnHeader(id, title, sort)
+    th(scope='col' class= sort? 'descending':'' id=id)
         .cheader-content
             label.headerLabel=title
             .sortbox
